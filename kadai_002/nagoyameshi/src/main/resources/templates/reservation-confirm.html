@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragment::meta}"></div>
+    <div th:replace="~{fragment::styles}"></div>
+    <title>予約内容確認</title>
+</head>
+<body>
+    <div th:replace="~{fragment::header}"></div> <!-- ヘッダー -->
+
+    <div class="reservation-confirmation-container">
+        <h2>予約内容確認</h2>
+
+        <!-- 予約内容の表示 -->
+        <div class="reservation-details">
+            <div>
+                <label>店舗名:</label>
+                <span th:text="${shop.shopName}">店舗名</span>
+            </div>
+            <div>
+                <label>予約日:</label>
+                <span th:text="${reservation.reservationDay}">予約日</span>
+            </div>
+            <div>
+                <label>予約時間:</label>
+                <span th:text="${reservation.reservationTime}">予約時間</span>
+            </div>
+            <div>
+                <label>人数:</label>
+                <span th:text="${reservation.reservationPersons}">人数</span>
+            </div>
+        </div>
+
+        <!-- 確定する・戻るボタン -->
+        <div>
+			<div>
+            <!-- 確定ボタン -->
+            <form th:action="@{/confirm-reservation}" method="post">
+                <input type="hidden" name="shopId" th:value="${shop.shopId}" />
+                <input type="hidden" name="reservationDate" th:value="${reservation.reservationDay}" />
+                <input type="hidden" name="reservationTime" th:value="${reservation.reservationTime}" />
+                <input type="hidden" name="reservationPersons" th:value="${reservation.reservationPersons}" />
+                <button type="submit" class="reserv-confirm-btn">確定する</button>
+            </form>
+			</div>
+
+            <!-- 戻るボタン -->
+			<div>
+            <form th:action="@{/shop-details/{shopId}(shopId=${shop.shopId})}" method="get">
+                <button type="submit" class="reserv-back-btn">戻る</button>
+            </form>
+			</div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragment::footer}"></div> <!-- フッター -->
+    <div th:replace="~{fragment::scripts}"></div>
+</body>
+</html>

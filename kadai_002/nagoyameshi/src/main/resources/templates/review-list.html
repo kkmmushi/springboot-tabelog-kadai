@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragment::meta}"></div>
+    <div th:replace="~{fragment::styles}"></div>
+    <title>レビュー一覧</title>
+    <script type="text/javascript">
+        // CSRFトークンを取得
+        function getCsrfToken() {
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+            return { [csrfHeader]: csrfToken };
+        }
+
+        // レビュー削除の確認ポップアップ
+        function confirmDelete(reviewNo) {
+            // ポップアップの表示
+            const userConfirmed = confirm("本当にこのレビューを削除しますか？");
+            
+            if (userConfirmed) {
+                // 「はい」が選ばれた場合、DELETEリクエストを送信
+                fetch('/reviews/delete/' + reviewNo, {
+                    method: 'POST', 
+                    headers: getCsrfToken() // CSRFトークンをヘッダーに追加
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload(); // 削除後、ページをリロード
+                    } else {
+                        alert("削除に失敗しました");
+                    }
+                });
+            } else {
+                // 「いいえ」が選ばれた場合、何もしない
+                return false;
+            }
+        }
+
+        // レビュー編集の確認ポップアップ
+        function confirmEdit(reviewNo) {
+            // 編集ページに遷移
+            window.location.href = '/reviews/edit/' + reviewNo;
+        }
+    </script>
+</head>
+<body>
+    <div th:replace="~{fragment::header}"></div>  <!-- ヘッダー -->
+    
+    <div class="container pt-4 pb-5 nagoyameshi-container">
+        <div class="row justify-content-center">
+            <div class="col-xl-5 col-lg-6 col-md-8">  
+                
+                <div th:if="${successMessage}" class="alert alert-info">
+                    <span th:text="${successMessage}"></span>
+                </div> 
+                
+                <div th:if="${errorMessage}" class="alert alert-danger">
+                    <span th:text="${errorMessage}"></span>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="reviewlist-container">
+        <h2 class="reviewlist-title">レビュー一覧</h2>
+        <div class="reviewlist-list">
+            <div th:each="review : ${reviews}">
+                <div class="reviewlist-item">
+                    <div class="reviewlist-shop-info">
+                        <h3 class="reviewlist-shop-name" th:text="${review.shopId.shopName}">店舗名</h3>
+                        <p class="reviewlist-review-date" th:text="'投稿日: ' + ${review.createdAt}">投稿日</p>
+                        <!-- 評価を☆で表示 -->
+                        <p class="reviewlist-review-rating">
+                            <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                <span th:class="${i <= review.rate} ? 'star-filled' : 'star-empty'">&#9733;</span>
+                            </span>
+                        </p>
+                        <p class="reviewlist-review-content" th:text="${review.reviewContent}">レビュー内容</p>
+                    </div>
+                    <div class="reviewlist-action-buttons">
+                        <!-- 「レビューを編集」ボタン -->
+                        <button type="button" 
+                           th:onclick="'confirmEdit(' + ${review.no} + ')'" 
+                           class="reviewlist-btn reviewlist-btn-edit">編集する</button>
+
+                        <!-- 「レビューを削除」ボタン -->
+                        <button type="button" 
+                           th:onclick="'confirmDelete(' + ${review.no} + ')'" 
+                           class="reviewlist-btn reviewlist-btn-delete">削除する</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ページネーション -->
+    <div class="reviewlist-pagination">
+        <span th:if="${currentPage != null and currentPage > 0}">
+            <a th:href="@{/reviews(page=0)}" class="reviewlist-page-link">最初</a>
+        </span>
+
+        <span th:if="${currentPage != null and currentPage > 0}">
+            <a th:href="@{/reviews(page=${currentPage - 1})}" class="reviewlist-page-link">前のページ</a>
+        </span>
+
+        <span th:each="pageNum : ${#numbers.sequence(currentPage != null ? currentPage - 1 : 0, currentPage != null ? currentPage + 1 : 1)}">
+            <span th:if="${pageNum >= 0 and pageNum < totalPages}">
+                <span th:class="${currentPage != null and currentPage == pageNum} ? 'reviewlist-current' : ''">
+                    <a th:href="@{/reviews(page=${pageNum})}" th:text="${pageNum + 1}" class="reviewlist-page-link"></a>
+                </span>
+            </span>
+        </span>
+
+        <span th:if="${currentPage != null and currentPage < totalPages - 1}">
+            <a th:href="@{/reviews(page=${currentPage + 1})}" class="reviewlist-page-link">次のページ</a>
+        </span>
+
+        <span th:if="${currentPage != null and currentPage < totalPages - 1}">
+            <a th:href="@{/reviews(page=${totalPages - 1})}" class="reviewlist-page-link">最後</a>
+        </span>
+    </div>
+
+    <div th:replace="~{fragment::footer}"></div>
+    <div th:replace="~{fragment::scripts}"></div>
+
+    <!-- CSRFトークンをHTMLに埋め込む -->
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+</body>
+</html>

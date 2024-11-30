@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragment::meta}"></div>
+    <div th:replace="~{fragment::styles}"></div>
+    <title>店舗一覧</title>
+    <!-- ボタンのスタイルを追加 -->
+    <style>
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #a0c8f0; /* 薄青色 */
+            color: #fff; /* 白文字 */
+            text-decoration: none; /* 下線を消す */
+            border-radius: 30px; /* 楕円形に */
+            font-size: 16px;
+            text-align: center;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn:hover {
+            background-color: #7faedb; /* ホバー時の色 */
+            transform: translateY(-2px); /* ホバー時に少し浮き上がる */
+        }
+
+        .btn:active {
+            transform: translateY(0); /* クリック時に元の位置に戻る */
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="~{fragment::header}"></div>  <!-- ヘッダー -->
+    
+	<!-- ページネーション -->
+	<div class="pagination">
+	    <!-- 最初のページ -->
+	    <span th:if="${currentPage > 0}">
+	        <a th:href="@{/shop-list(page=0, categoryNo=${selectedCategoryNo}, search=${searchText != null ? searchText : ''})}">最初</a>
+	    </span>
+
+	    <!-- 前のページ -->
+	    <span th:if="${currentPage > 0}">
+	        <a th:href="@{/shop-list(page=${currentPage - 1}, categoryNo=${selectedCategoryNo}, search=${searchText != null ? searchText : ''})}">前のページ</a>
+	    </span>
+
+	    <!-- ページ番号（前後3つのページ） -->
+	    <span th:each="pageNum : ${#numbers.sequence(currentPage - 1, currentPage + 1)}">
+	        <span th:if="${pageNum >= 0 && pageNum < totalPages}">
+	            <span th:class="${currentPage == pageNum} ? 'current' : ''">
+	                <a th:href="@{/shop-list(page=${pageNum}, categoryNo=${selectedCategoryNo}, search=${searchText != null ? searchText : ''})}" th:text="${pageNum + 1}"></a>
+	            </span>
+	        </span>
+	    </span>
+
+	    <!-- 次のページ -->
+	    <span th:if="${currentPage < totalPages - 1}">
+	        <a th:href="@{/shop-list(page=${currentPage + 1}, categoryNo=${selectedCategoryNo}, search=${searchText != null ? searchText : ''})}">次のページ</a>
+	    </span>
+
+	    <!-- 最後のページ -->
+	    <span th:if="${currentPage < totalPages - 1}">
+	        <a th:href="@{/shop-list(page=${totalPages - 1}, categoryNo=${selectedCategoryNo}, search=${searchText != null ? searchText : ''})}">最後</a>
+	    </span>
+
+	    <!-- 現在のページ表示 -->
+	    <span class="nowpage mb-10">現在のページ: <span th:text="${currentPage + 1}">1</span> / <span th:text="${totalPages}">10</span></span>
+	</div>
+    
+    <div class="shopcontainer">
+        <!-- 右側の検索・絞り込みフォーム -->
+        <div class="filters">
+            <form action="/shop-list" method="get">
+                <!-- カテゴリ選択 -->
+                <div>
+                    <label for="categoryNo"style="font-weight: bold; font-size: 18px;">カテゴリ:</label>
+                    <select name="categoryNo" id="categoryNo" th:value="${selectedCategoryNo}">
+                        <option value="0">全て</option>
+                        <th:block th:each="category : ${categoryMap}">
+                            <option th:value="${category.key}" th:text="${category.value}"
+                                th:selected="${category.key == selectedCategoryNo}"></option>
+                        </th:block>
+                    </select>
+                </div>
+
+                <!-- 絞り込みボタン -->
+                <button type="submit" class="btn888">絞り込み</button>
+                
+                <div>
+                    <label for="search"style="font-weight: bold; font-size: 18px;">検索:</label>
+                    <input type="text" name="search" id="search" th:value="${searchText}" placeholder="店名で検索">
+                </div>
+                
+                <button type="submit" class="btn888">検索</button>
+            </form>
+        </div>
+
+        <!-- 店舗一覧 -->
+        <div class="shop-list">
+            <div th:each="shop : ${shops}">
+                <div class="shop-item">
+                    <div class="shop-image">
+                        <img th:src="@{'/storage/' + ${shop.imageName}}" alt="店舗画像" />
+                    </div>
+                    <div class="shop-info">
+                        <h2 th:text="${shop.shopName}">店舗名</h2>
+                        <div class="category-name" th:text="${categoryMap[shop.categoryNo]}">カテゴリー名</div> <!-- モデルからカテゴリ名を取得 -->
+                        <p th:text="'営業時間: ' + ${shop.openTime} + '〜' + ${shop.closeTime}">営業時間</p>
+                        <p th:text="${shop.address}">住所</p>
+                    </div>
+                    <!-- 店舗詳細を表示するボタン -->
+                    <div class="shop-details-btn">
+                        <!-- shop.shopIdを使用 -->
+                        <a th:href="@{/shop/{shopId}(shopId=${shop.shopId})}" class="btn">店舗詳細を表示➡️</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>    
+
+	<!-- ページネーション -->
+	<div class="pagination">
+	    <!-- 最初のページ -->
+	    <span th:if="${currentPage > 0}">
+	        <a th:href="@{/shop-list(page=0, categoryNo=${selectedCategoryNo}, search=${searchText != null ? searchText : ''})}">最初</a>
+	    </span>
+
+	    <!-- 前のページ -->
+	    <span th:if="${currentPage > 0}">
+	        <a th:href="@{/shop-list(page=${currentPage - 1}, categoryNo=${selectedCategoryNo}, search=${searchText != null ? searchText : ''})}">前のページ</a>
+	    </span>
+
+	    <!-- ページ番号（前後3つのページ） -->
+	    <span th:each="pageNum : ${#numbers.sequence(currentPage - 1, currentPage + 1)}">
+	        <span th:if="${pageNum >= 0 && pageNum < totalPages}">
+	            <span th:class="${currentPage == pageNum} ? 'current' : ''">
+	                <a th:href="@{/shop-list(page=${pageNum}, categoryNo=${selectedCategoryNo}, search=${searchText != null ? searchText : ''})}" th:text="${pageNum + 1}"></a>
+	            </span>
+	        </span>
+	    </span>
+
+	    <!-- 次のページ -->
+	    <span th:if="${currentPage < totalPages - 1}">
+	        <a th:href="@{/shop-list(page=${currentPage + 1}, categoryNo=${selectedCategoryNo}, search=${searchText != null ? searchText : ''})}">次のページ</a>
+	    </span>
+
+	    <!-- 最後のページ -->
+	    <span th:if="${currentPage < totalPages - 1}">
+	        <a th:href="@{/shop-list(page=${totalPages - 1}, categoryNo=${selectedCategoryNo}, search=${searchText != null ? searchText : ''})}">最後</a>
+	    </span>
+
+	    <!-- 現在のページ表示 -->
+	    <span class="nowpage mb-10">現在のページ: <span th:text="${currentPage + 1}">1</span> / <span th:text="${totalPages}">10</span></span>
+	</div>
+    
+    <div th:replace="~{fragment::footer}"></div>  
+    <div th:replace="~{fragment::scripts}"></div>
+</body>
+</html>

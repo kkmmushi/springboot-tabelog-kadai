@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragment::meta}"></div>  <!-- Meta情報（定義されているFragmentを使う） -->
+    <div th:replace="~{fragment::styles}"></div>  <!-- スタイルのFragment（定義されているFragmentを使う） -->
+    <title>クレジットカード情報の更新</title>
+    <!-- Stripe.js ライブラリ -->
+    <script src="https://js.stripe.com/v3/"></script> 
+</head>
+
+<body>
+    <div>
+        <div th:replace="~{fragment::header}"></div>  <!-- ヘッダー（Fragmentを使う） -->
+        <main>
+            <div class="container pt-3 pb-5">
+                <div class="row justify-content-center">
+                    <div class="col-xl-6 col-lg-8 col-md-10">  
+                        <h1 class="mb-4 text-center">クレジットカード情報の更新</h1>
+
+                        <!-- 申込説明文 -->
+                        <p class="paiduser-text-center">新しいクレジットカード情報を以下のフォームから入力してください。</p>
+
+                        <!-- 成功メッセージ -->
+                        <div th:if="${successMessage}" class="paiduser-alert paiduser-alert-info">
+                            <span th:text="${successMessage}"></span>
+                        </div>
+
+                        <!-- エラーメッセージ -->
+                        <div th:if="${errorMessage}" class="paiduser-alert paiduser-alert-danger">
+                            <span th:text="${errorMessage}"></span>
+                        </div>
+
+                        <!-- Stripe決済フォーム -->
+                        <form id="update-payment-form" action="/update-card" method="POST">
+                            <!-- ユーザーIDを隠しフィールドで送信 -->
+                            <input type="hidden" name="userId" th:value="${user.id}" />  
+
+                            <!-- CSRFトークン -->
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+
+                            <div class="mb-4">
+                                <label for="card-element" class="form-label">新しいクレジットカード情報</label>
+
+                                <!-- カード番号、有効期限、セキュリティコードを一つのボックス内に統合 -->
+                                <div id="card-element" class="paiduser-input-box">
+                                    <!-- Stripeのカード情報フィールドがここに挿入されます -->
+                                </div>
+
+                                <!-- エラーメッセージ表示 -->
+                                <div id="card-errors" role="alert"></div>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <button id="update-payment-submit" class="btn btn-success">カード情報を更新する</button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        <div th:replace="~{fragment::footer}"></div>  <!-- フッター（Fragmentを使う） -->
+    </div>  
+    <div th:replace="~{fragment::scripts}"></div>  <!-- スクリプト（Fragmentを使う） -->
+
+    <!-- Stripeのスクリプト -->
+    <script type="text/javascript">
+        // Thymeleaf式で公開鍵を埋め込む
+        const stripePublicKey = "[[${stripePublicKey}]]"; // Springから渡された公開鍵を取得
+
+        if (!stripePublicKey || stripePublicKey.trim() === '') {
+            console.error("Stripe公開鍵が設定されていません。");
+        } else {
+            const stripe = Stripe(stripePublicKey);
+            const elements = stripe.elements();
+
+            // カード情報を1つのフィールドに統合
+            const card = elements.create("card");
+            card.mount("#card-element");
+
+            // フォーム送信処理
+            const form = document.getElementById("update-payment-form");
+            form.addEventListener("submit", async (event) => {
+                event.preventDefault();
+
+                const {token, error} = await stripe.createToken(card);
+
+                if (error) {
+                    // エラーがあれば表示
+                    const errorElement = document.getElementById("card-errors");
+                    errorElement.textContent = error.message;
+                } else {
+                    // トークンがあれば、サーバーに送信
+                    stripeTokenHandler(token);
+                }
+            });
+
+            // トークン送信処理
+            function stripeTokenHandler(token) {
+                const form = document.getElementById("update-payment-form");
+
+                const hiddenInput = document.createElement("input");
+                hiddenInput.setAttribute("type", "hidden");
+                hiddenInput.setAttribute("name", "stripeToken");
+                hiddenInput.setAttribute("value", token.id);
+                form.appendChild(hiddenInput);
+
+                // フォーム送信
+                form.submit();
+            }
+        }
+    </script>
+</body>
+</html>

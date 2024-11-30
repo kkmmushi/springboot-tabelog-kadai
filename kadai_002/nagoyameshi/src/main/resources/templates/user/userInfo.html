@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <div th:replace="~{fragment::meta}"></div>
+        <div th:replace="~{fragment::styles}"></div>    
+        <title>会員情報</title>    
+    </head>
+    
+    <body>
+        <div>
+            <div th:replace="~{fragment::header}"></div> <!-- ヘッダー -->
+            <main>
+				<div class="container pt-4 pb-5 nagoyameshi-container">
+				    <div class="row justify-content-center">
+				        <div class="col-xl-5 col-lg-6 col-md-8">  
+				            
+				            <!-- successMessage が null でない場合に表示 -->
+				            <div th:if="${successMessage != null}" class="alert alert-info">
+				                <span th:text="${successMessage}"></span>
+				            </div> 
+
+				            <!-- errorMessage が null でない場合に表示 -->
+				            <div th:if="${errorMessage != null}" class="alert alert-danger">
+				                <span th:text="${errorMessage}"></span>
+				            </div>
+				            
+				        </div>
+				    </div>
+				</div>
+                <div class="container pt-5 pb-5">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-8 col-lg-8 col-md-10">
+                            <h1 class="mb-4 text-center">会員情報</h1>
+
+                            <!-- ユーザー情報を表示するテーブル -->
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">ユーザー詳細</h5>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">項目</th>
+                                                <th scope="col">内容</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">名前</th>
+                                                <td th:text="${user.name}">名前</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">メールアドレス</th>
+                                                <td th:text="${user.email}">メールアドレス</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">電話番号</th>
+                                                <td th:text="${user.phoneNumber}">電話番号</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">ユーザータイプ</th>
+                                                <td th:text="${user.userType}">ユーザータイプ</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- プロフィール編集ボタン -->
+                            <div class="text-center mt-4">
+                                <a th:href="@{/editProfile}" class="btn btn-warning">プロフィール編集</a>
+                            </div>
+
+                            <!-- 無料会員の場合に「有料会員になる」ボタンを表示 -->
+                            <div th:if="${user.userType == 'FREE_USER'}" class="text-center mt-4">
+                                <a th:href="@{/subscribe}" class="btn btn-success">有料会員になる</a>
+                            </div>
+
+                            <!-- 有料会員の場合に「有料会員情報を編集する」ボタンを表示 -->
+                            <div th:if="${user.userType == 'PAID_USER'}" class="text-center mt-4">
+                                <a th:href="@{/editSubscription}" class="btn btn-info">有料会員情報を編集する</a>
+                            </div>
+
+                            <!-- 有料会員の場合に「有料会員をやめる」ボタンを表示 -->
+                            <div th:if="${user.userType == 'PAID_USER'}" class="text-center mt-4">
+                                <a th:href="@{/unsubscribe}" class="btn btn-danger">有料会員を解約する</a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+            <div th:replace="~{fragment::footer}"></div>  
+        </div>  
+        <div th:replace="~{fragment::scripts}"></div>
+    </body>
+</html>

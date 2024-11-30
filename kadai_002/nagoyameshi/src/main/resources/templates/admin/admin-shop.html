@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{fragment::meta}"></div>
+    <div th:replace="~{fragment::styles}"></div>
+    <title>店舗管理</title>
+    <style>
+        .shop-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+            padding: 20px;
+            background-color: #f4f7fc;
+        }
+        .shop-box {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 1000px;
+        }
+        .shop-box h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn-base {
+            padding: 10px 20px;
+            background-color: #a0c8f0;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn-base:hover {
+            background-color: #7faedb;
+        }
+        .btn-base:active {
+            transform: translateY(0);
+        }
+        .shop-list {
+            margin-top: 30px;
+            width: 100%;
+            text-align: center;
+        }
+        .shop-list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .shop-list table, th, td {
+            border: 1px solid #ddd;
+        }
+        .shop-list th, .shop-list td {
+            padding: 10px;
+            text-align: left;
+        }
+        .shop-list th {
+            background-color: #f4f7fc;
+        }
+        .shop-actions button {
+            padding: 5px 10px;
+            margin-right: 5px;
+            background-color: #ffcc00;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .shop-actions button.delete {
+            background-color: #f44336;
+        }
+        .shop-actions button.edit {
+            background-color: #4CAF50;
+        }
+        /* ポップアップのスタイル */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        .popup-content {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .popup button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .popup .yes {
+            background-color: #f44336;
+            color: white;
+        }
+        .popup .no {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダーの部品化 ------------------------------------------------->
+    <div>
+        <nav class="navbar navbar-expand-md navbar-light bg-white">
+            <div class="headcontainer">
+                <a class="navbar-brand" th:href="@{/admin/base}">                        
+                    <img class="nagoyameshi-logo1" th:src="@{/images/nagoyameshi.png}" alt="NAGOYA Meshi">                        
+                </a>    
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">                                    
+                    <ul class="navbar-nav ms-auto">                                                                                     
+                        
+                        <!-- ログイン済みであれば表示する --> 
+                        <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                            <a id="navbarDropdownGeneral" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <span>メニュー</span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownGeneral">
+                                <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/admin/base}">ダッシュボード</a> 
+                                
+                                <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    ログアウト
+                                </a>
+                                <form class="d-none" id="logout-form" th:action="@{/logout}" method="post"></form>                                     
+                            </div>
+                        </li>                       
+                    </ul>
+                </div>
+            </div>
+        </nav>    
+    </div>
+	
+	
+	<div class="container pt-4 pb-5 nagoyameshi-container">
+		     <div class="row justify-content-center">
+		         <div class="col-xl-5 col-lg-6 col-md-8">  
+		             
+		             <div th:if="${successMessage}" class="alert alert-info">
+		                 <span th:text="${successMessage}"></span>
+		             </div> 
+		             
+		             <div th:if="${errorMessage}" class="alert alert-danger">
+		                 <span th:text="${errorMessage}"></span>
+		             </div>
+		             
+		         </div>
+		     </div>
+		 </div>
+	
+	
+	
+
+    <div class="shop-container">
+        <div class="shop-box">
+            <h2>店舗管理</h2>
+
+            <!-- 店舗検索フォーム -->
+            <form action="/admin/shop" method="get" class="form-group">
+                <input type="text" name="shopName" placeholder="店舗名で検索" value="検索店舗名">
+                <button type="submit" class="btn-base">検索</button>
+            </form>
+
+            <!-- 新規店舗登録リンク -->
+            <a href="/admin/shop/new" class="btn-base">新規店舗登録</a>
+
+            <!-- 店舗一覧表示 -->
+            <div class="shop-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>店舗名</th>
+                            <th>カテゴリー名</th>
+                            <th>営業時間</th>
+                            <th>住所</th>
+                            <th>電話番号</th>
+                            <th>アクション</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="shop : ${shops}">
+                            <td th:text="${shop.shopName}">店舗名</td>
+                            <td th:text="${shop.categoryName}">カテゴリー名</td>
+                            <td th:text="${shop.openTime}">営業時間</td>
+                            <td th:text="${shop.address}">住所</td>
+                            <td th:text="${shop.phoneNumber}">電話番号</td>
+                            <td class="shop-actions">
+                                <!-- 編集ボタン -->
+                                <a href="/admin/shop/edit/{shopId}" th:href="@{/admin/shop/edit/{shopId}(shopId=${shop.shopId})}" class="btn-base edit">編集</a>
+                                <!-- 削除ボタン -->
+                                <button class="btn-base delete" th:onclick="|showPopup(${shop.shopId})|">削除</button>
+                                <!-- 削除フォーム -->
+                                <form th:action="@{/admin/shop/delete/{shopId}(shopId=${shop.shopId})}" method="post" th:id="'delete-form-' + ${shop.shopId}" style="display:none;"></form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- ページネーション -->
+            <div>
+                <span th:if="${currentPage > 0}">
+                    <a th:href="@{/admin/shop?page={page}(page=${currentPage - 1})}">前のページ</a>
+                </span>
+                <span th:if="${currentPage < totalPages - 1}">
+                    <a th:href="@{/admin/shop?page={page}(page=${currentPage + 1})}">次のページ</a>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ポップアップ -->
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <p>本当に削除しますか？</p>
+            <button class="yes" onclick="confirmDelete()">はい</button>
+            <button class="no" onclick="closePopup()">いいえ</button>
+        </div>
+    </div>
+
+    <div th:replace="~{fragment::footer}"></div> <!-- フッター -->
+    <div th:replace="~{fragment::scripts}"></div>
+
+    <script>
+        let shopIdToDelete = null;
+
+        function showPopup(shopId) {
+            shopIdToDelete = shopId;
+            document.getElementById('popup').style.display = 'flex';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        function confirmDelete() {
+            if (shopIdToDelete !== null) {
+                let form = document.getElementById('delete-form-' + shopIdToDelete);
+                if (form) {
+                    form.submit();
+                }
+            }
+            closePopup();
+        }
+    </script>
+</body>
+</html>

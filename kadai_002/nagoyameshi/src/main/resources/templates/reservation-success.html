@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragment::meta}"></div>
+    <div th:replace="~{fragment::styles}"></div>
+    <title>予約完了</title>
+</head>
+<body>
+	<div th:replace="~{fragment::header}"></div> <!-- ヘッダー -->
+	<div class="reserv-container3">
+    <h2 class="reserv-h2-2">予約が確定しました！</h2>
+
+    <p class="reserv-p-2">店舗名: <span class="reserv-span-2" th:text="${shop.shopName}"></span></p>
+    <p  class="reserv-p-2">予約日: <span  class="reserv-span-2" th:text="${reservation.reservationDay}"></span></p>
+    <p  class="reserv-p-2">予約時間: <span  class="reserv-span-2" th:text="${reservation.reservationTime}"></span></p>
+    <p  class="reserv-p-2">人数: <span  class="reserv-span-2" th:text="${reservation.reservationPersons}"></span></p>
+
+    <a th:href="@{/shop/{shopId}(shopId=${shop.shopId})}">店舗詳細ページに戻る</a>
+	</div>
+	
+	<div th:replace="~{fragment::footer}"></div> <!-- フッター -->
+	<div th:replace="~{fragment::scripts}"></div>
+</body>
+</html>

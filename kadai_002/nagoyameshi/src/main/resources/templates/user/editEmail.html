@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+    <head>
+        <div th:replace="~{fragment::meta}"></div>
+        <div th:replace="~{fragment::styles}"></div>
+        <title>メールアドレス変更</title>
+    </head>
+    
+    <body>
+		
+
+        <div>
+            <div th:replace="~{fragment::header}"></div>
+			
+            <main>
+ 
+				<!----------------------------------------成功、エラーメッセージ---------------->
+				<div class="container pt-4 pb-5 nagoyameshi-container">
+				     <div class="row justify-content-center">
+				         <div class="col-xl-5 col-lg-6 col-md-8">  
+				             
+				             <div th:if="${successMessage}" class="alert alert-info">
+				                 <span th:text="${successMessage}"></span>
+				             </div> 
+				             
+				             <div th:if="${errorMessage}" class="alert alert-danger">
+				                 <span th:text="${errorMessage}"></span>
+				             </div>
+				             
+				         </div>
+				     </div>
+				 </div>
+				<!------------------------------------------------------------------------------>
+				
+				               <div class="container pt-4 pb-5">
+                    <h1 class="mb-4 text-center">メールアドレスの変更</h1>
+                    <p>メールアドレスを変更するには確認メールを送信します。新しいメールアドレスを入力してください。</p>
+                    <form th:action="@{/sendEmailVerification}" method="post">
+                        <div class="form-group">
+                            <label for="email">新しいメールアドレス</label>
+                            <input type="email" class="form-control mb-3" id="email" name="email" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">確認メールを送信</button>
+                    </form>
+                </div>
+            </main>
+            <div th:replace="~{fragment::footer}"></div>
+        </div>
+        <div th:replace="~{fragment::scripts}"></div>
+    </body>
+</html>

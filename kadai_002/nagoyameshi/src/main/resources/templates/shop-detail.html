@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragment::meta}"></div>
+    <div th:replace="~{fragment::styles}"></div>
+    <title>店舗詳細</title>
+</head>
+<body>
+    <div th:replace="~{fragment::header}"></div> <!-- ヘッダー -->
+
+    <div class="shopinfo-details-container">
+        
+        <!-- お気に入りボタン -->
+        <div class="favorite-btn-wrapper" sec:authorize="isAuthenticated()" th:if="${#authentication.principal.userType == 'PAID_USER'}">
+            <form th:action="@{/add-favorite}" method="post">
+                <input type="hidden" name="shopId" th:value="${shop.shopId}" />
+                <button class="favorite-btn" aria-label="お気に入りボタン">
+                    <!-- お気に入りに登録されているかどうかでボタンの表示を変更 -->
+                    <span th:if="${isFavorite}">
+                        ♥ お気に入り
+                    </span>
+                    <span th:if="${not isFavorite}">
+                        ♡ お気に入りに追加
+                    </span>
+                </button>
+            </form>
+        </div>
+        
+        <!-- 店舗の画像 -->
+        <div class="shopinfo-image">
+            <img th:src="@{'/storage/' + ${shop.imageName}}" alt="店舗画像" />
+        </div>
+
+        <!-- 店舗の詳細情報 -->
+        <div class="shopinfo-info">
+            <h2 th:text="${shop.shopName}" class="shop-info-name">店舗名</h2>
+            <div>
+                <label for="categoryName">カテゴリ:</label>
+                <span th:text="${categoryMap[shop.categoryNo]}"></span>
+            </div>
+            <p th:text="'住所: ' + ${shop.address}">住所</p>
+            <p th:text="'営業時間: ' + ${shop.openTime} + '〜' + ${shop.closeTime}">営業時間</p>
+
+            <!-- 店舗の詳細な説明（もしあれば） -->
+            <div th:if="${shop.description}" class="shopinfo-description">
+                <h3>店舗の詳細</h3>
+                <p th:text="${shop.description}">店舗詳細情報</p>
+            </div>
+        </div>
+
+        <!-- 予約フォーム（有料会員のみ表示） -->
+        <div sec:authorize="isAuthenticated() and #authentication.principal.userType == 'PAID_USER'" class="reservation-form">
+            <h3>予約する</h3>
+            <form th:action="@{/reservation-confirmation}" method="post">
+                <input type="hidden" name="shopId" th:value="${shop.shopId}" />
+                
+                <!-- 日付選択 -->
+                <div class="reservation-item">
+                    <label for="reservation-date" class="reservation-label">予約日:</label>
+                    <input type="date" id="reservation-date" name="reservationDate" class="reservation-input" required />
+                </div>
+
+                <!-- 時間選択 -->
+                <div class="reservation-item">
+                    <label for="reservation-time" class="reservation-label">予約時間:</label>
+                    <input type="time" id="reservation-time" name="reservationTime" class="reservation-input" required/>
+                </div>
+
+                <!-- 人数選択 -->
+                <div class="reservation-item">
+                    <label for="reservation-persons" class="reservation-label">人数:</label>
+                    <input type="number" id="reservation-persons" name="reservationPersons" class="reservation-input" min="1" required/>
+                </div>
+
+                <!-- 予約ボタン -->
+                <div class="reservation-item">
+                    <button type="submit" class="reservation-btn">予約確認</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- レビュー機能 -->
+        <div sec:authorize="isAuthenticated() and #authentication.principal.userType == 'PAID_USER'" class="review-form">
+            <h3>レビューを書く</h3>
+            <form th:action="@{/submit-review}" method="post">
+                <input type="hidden" name="shopId" th:value="${shop.shopId}" />
+                
+                <!-- 評価レート（☆） -->
+                <div class="rating">
+                    <label for="rating">評価:</label>
+                    <span class="star-rating">
+                        <input type="radio" name="rating" value="1" id="star1" class="star" />
+                        <label for="star1">&#9733;</label>
+                       
+                        <input type="radio" name="rating" value="2" id="star2" class="star" />
+                        <label for="star2">&#9733;</label>
+                        
+                        <input type="radio" name="rating" value="3" id="star3" class="star" />
+                        <label for="star3">&#9733;</label>
+                        
+                        <input type="radio" name="rating" value="4" id="star4" class="star" />
+                        <label for="star4">&#9733;</label>
+                        
+                        <input type="radio" name="rating" value="5" id="star5" class="star" />
+                        <label for="star5">&#9733;</label>
+                    </span>
+                </div>
+
+                <!-- 評価内容 -->
+                <div class="review-item">
+                    <label for="review-content" class="review-label">評価内容:</label>
+                    <textarea id="review-content" name="reviewContent" class="review-input" rows="4" required></textarea>
+                </div>
+
+                <!-- 送信ボタン -->
+                <div class="review-item">
+                    <button type="submit" class="review-btn">投稿する</button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- 戻るボタン -->
+        <div>
+            <a th:href="@{/shop-list(page=${currentPage})}" class="shopinfo-btn">店舗一覧に戻る</a>
+        </div>
+    </div>
+
+    <div th:replace="~{fragment::footer}"></div> <!-- フッター -->
+    <div th:replace="~{fragment::scripts}"></div>
+    
+    <script>
+      // 今日の日付を取得して、min属性に設定
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('reservation-date').setAttribute('min', today);
+
+      const stars = document.querySelectorAll('.star'); // radio input 要素
+      const labels = document.querySelectorAll('.star-rating label'); // label 要素
+
+      stars.forEach(star => {
+        star.addEventListener('change', () => {
+          // すべてのlabel要素に「selected」クラスを外す
+          labels.forEach(label => label.classList.remove('selected'));
+
+          // 選択された radio の value を基に、それより左の label に「selected」クラスを追加
+          const selectedValue = parseInt(star.value, 10);
+          labels.forEach(label => {
+            const labelValue = parseInt(label.getAttribute('for').replace('star', ''), 10);
+            if (labelValue <= selectedValue) {
+              label.classList.add('selected');
+            }
+          });
+        });
+      });
+    </script>
+</body>
+</html>

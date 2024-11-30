@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <!-- meta要素の部品化 -->
+    <div th:fragment="meta" th:remove="tag">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </div> 
+
+    <!-- link要素の部品化 -->
+    <div th:fragment="styles" th:remove="tag">
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        
+        <!-- Google Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
+        
+        <link th:href="@{/css/style.css}" rel="stylesheet" >
+        <!--font awesome-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </div> 
+    <title>部品化html</title>    
+
+</head>    
+<body>
+
+<!-- ヘッダーの部品化 ------------------------------------------------->
+<div th:fragment="header" th:remove="tag">
+    <nav class="navbar navbar-expand-md navbar-light bg-white">
+        <div class="headcontainer">
+            <a class="navbar-brand" th:href="@{/}">                        
+                <img class="nagoyameshi-logo1" th:src="@{/images/nagoyameshi.png}" alt="NAGOYA Meshi">                        
+            </a>    
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">                                    
+                <ul class="navbar-nav ms-auto">    
+
+                    <!-- 未ログインであれば表示する -->
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link" th:href="@{/login}">ログイン</a>
+                    </li> 
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link" th:href="@{/signup}">会員登録</a>
+                    </li>                                                                                 
+                    
+                    <!-- ログイン済みであれば表示する --> 
+                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                        <a id="navbarDropdownGeneral" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            <span sec:authentication="principal.user.name"></span>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownGeneral">
+                            <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/userInfo}">会員情報</a>
+
+				
+                            <!-- 「有料会員」なら表示される項目 -->
+                           
+								<div th:if="${#authentication.principal.getUser().userType != null and #authentication.principal.getUser().userType == 'PAID_USER'}">
+                                <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/reservations}">予約一覧</a>  
+                                <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/likesAll}">お気に入り一覧</a>  
+                                <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/reviewsAll}">レビュー一覧</a>
+                            </div>
+
+                            <div class="dropdown-divider"></div>
+                            
+                            <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                ログアウト
+                            </a>
+                            <form class="d-none" id="logout-form" th:action="@{/logout}" method="post"></form>                                     
+                        </div>
+                    </li>                       
+                </ul>
+            </div>
+        </div>
+    </nav>    
+</div>
+
+<!-- フッターの部品化 ----------------------------------------------->
+<div th:fragment="footer" th:remove="tag">
+    <footer>
+        <div class="d-flex justify-content-center align-items-center h-120">
+            <p class="text-center text-muted small mb-0">&copy; NAGOYA Meshi All rights reserved.</p>      
+        </div>                 
+    </footer>
+</div>
+
+<!-- script要素の部品化 -->
+<div th:fragment="scripts" th:remove="tag">
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</div>
+</body>
+</html>

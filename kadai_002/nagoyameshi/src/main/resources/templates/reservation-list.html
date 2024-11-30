@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragment::meta}"></div>
+    <div th:replace="~{fragment::styles}"></div>
+    <title>予約一覧</title>
+    <script type="text/javascript">
+        // 予約取り消しの確認ポップアップ
+        function confirmCancel(reservationNo) {
+            // ポップアップの表示
+            const userConfirmed = confirm("本当に予約を取り消しますか？");
+            
+            if (userConfirmed) {
+                // 「はい」が選ばれた場合、予約を取り消すリンクへ遷移
+                window.location.href = '/reservations/cancel/' + reservationNo;
+            } else {
+                // 「いいえ」が選ばれた場合、何もしない（ページに戻る）
+                return false;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div th:replace="~{fragment::header}"></div>  <!-- ヘッダー -->
+	<div class="container pt-4 pb-5 nagoyameshi-container">
+		     <div class="row justify-content-center">
+		         <div class="col-xl-5 col-lg-6 col-md-8">  
+		             
+		             <div th:if="${successMessage}" class="alert alert-info">
+		                 <span th:text="${successMessage}"></span>
+		             </div> 
+		             
+		             <div th:if="${errorMessage}" class="alert alert-danger">
+		                 <span th:text="${errorMessage}"></span>
+		             </div>
+		             
+		         </div>
+		     </div>
+		 </div>
+
+    <div class="reservlist-container">
+        <h2 class="reservlist-title">予約一覧</h2>
+        <div class="reservlist-list">
+            <div th:each="reservation : ${reservations}">
+                <div class="reservlist-item">
+                    <div class="reservlist-shop-info">
+                        <h3 class="reservlist-shop-name" th:text="${reservation.shopId.shopName}">店舗名</h3>
+                        <p class="reservlist-reservation-day" th:text="'予約日: ' + ${reservation.reservationDay}">予約日</p>
+                        <p class="reservlist-reservation-time" th:text="'予約時間: ' + ${reservation.reservationTime}">予約時間</p>
+                        <p class="reservlist-reservation-persons" th:text="'人数: ' + ${reservation.reservationPersons}">人数</p>
+                    </div>
+                    <div class="reservlist-cancel-btn">
+                        <!-- 「予約を取り消す」ボタン -->
+                        <a href="javascript:void(0);" 
+                           th:onclick="'confirmCancel(' + ${reservation.no} + ')'" 
+                           class="reservlist-btn">予約を取り消す</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ページネーション -->
+    <div class="reservlist-pagination">
+        <span th:if="${currentPage != null and currentPage > 0}">
+            <a th:href="@{/reservations(page=0)}" class="reservlist-page-link">最初</a>
+        </span>
+
+        <span th:if="${currentPage != null and currentPage > 0}">
+            <a th:href="@{/reservations(page=${currentPage - 1})}" class="reservlist-page-link">前のページ</a>
+        </span>
+
+        <span th:each="pageNum : ${#numbers.sequence(currentPage != null ? currentPage - 1 : 0, currentPage != null ? currentPage + 1 : 1)}">
+            <span th:if="${pageNum >= 0 and pageNum < totalPages}">
+                <span th:class="${currentPage != null and currentPage == pageNum} ? 'reservlist-current' : ''">
+                    <a th:href="@{/reservations(page=${pageNum})}" th:text="${pageNum + 1}" class="reservlist-page-link"></a>
+                </span>
+            </span>
+        </span>
+
+        <span th:if="${currentPage != null and currentPage < totalPages - 1}">
+            <a th:href="@{/reservations(page=${currentPage + 1})}" class="reservlist-page-link">次のページ</a>
+        </span>
+
+        <span th:if="${currentPage != null and currentPage < totalPages - 1}">
+            <a th:href="@{/reservations(page=${totalPages - 1})}" class="reservlist-page-link">最後</a>
+        </span>
+    </div>
+
+    <div th:replace="~{fragment::footer}"></div>
+    <div th:replace="~{fragment::scripts}"></div>
+</body>
+</html>

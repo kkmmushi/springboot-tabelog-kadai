@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<head>
+		<div th:replace="~{fragment::meta}"></div>
+		<div th:replace="~{fragment::styles}"></div>	
+		<title>ログイン画面</title>	
+	</head>
+	
+	<body>
+		<div>
+			<div th:replace="~{fragment::header}"></div>  <!--ヘッダー-->
+			<main>
+				<div class="container pt-4 pb-5 nagoyameshi-container">
+				     <div class="row justify-content-center">
+				         <div class="col-xl-5 col-lg-6 col-md-8">  
+				             
+				             <div th:if="${successMessage}" class="alert alert-info">
+				                 <span th:text="${successMessage}"></span>
+				             </div> 
+				             
+				             <div th:if="${errorMessage}" class="alert alert-danger">
+				                 <span th:text="${errorMessage}"></span>
+				             </div>
+				             
+				         </div>
+				     </div>
+				 </div>
+				<div class="container pt-5 pb-5 login-container">
+					<div class="row justify-content-center">
+						<div class="col-xl-4 col-lg-4 col-md-5 col-sm-7">
+							<h1 class="mb-4 text-center">ログイン</h1>
+							<div th:if="${param.error}" class="alert alert-danger">メールまたはパスワードが正しくありません</div>
+					<!---------------------------------ここからFORM------------------------------------>
+							<form th:action="@{/login}" method="post">
+								<div class="login-form mb-4">
+									<input type="email" class="form-control" name="username" autocomplete="email" placeholder="メールアドレス" autofocus>
+								</div>
+								<div class="login-form mb-4">
+									<input type="password" class="form-control" name="password" autocomplete="new-password" placeholder="パスワード">
+								</div>
+								
+								<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+								
+								<div class="login-form mb-4 d-flex justify-content-center">
+									<button type="submit" class="btn text-black shadow-sm w-120">
+										<i class="fas fa-sign-in-alt"></i>ログイン
+									</button>
+								</div>
+							</form>
+					<!---------------------------------ここまでFORM------------------------------------>	
+					        <div class="text-center">
+								<a th:href="@{/signup}">会員登録</a>
+							</div>	
+							<div class="text-center">
+								<a th:href="@{/passmissing}" style="color: darkgreen; font-size: 10px;">パスワードを忘れた方</a>
+							</div>	
+										
+				        </div>
+					</div>
+				</div>
+			</main>
+			<div th:replace="~{fragment::footer}"></div>  
+		</div>	
+		<div th:replace="~{fragment::scripts}"></div>
+	</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragment::meta}"></div>
+    <div th:replace="~{fragment::styles}"></div>
+    <title>レビュー編集</title>
+</head>
+<body>
+    <div th:replace="~{fragment::header}"></div> <!-- ヘッダー -->
+
+    <div class="container pt-4 pb-5 nagoyameshi-container">
+        <div class="row justify-content-center">
+            <div class="col-xl-5 col-lg-6 col-md-8">
+                <div th:if="${successMessage}" class="alert alert-info">
+                    <span th:text="${successMessage}"></span>
+                </div>
+                <div th:if="${errorMessage}" class="alert alert-danger">
+                    <span th:text="${errorMessage}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="review-edit-container">
+        <h2>レビュー編集</h2>
+
+        <!-- 店舗の情報 -->
+        <div class="shop-info">
+            <h3 th:text="'店舗名: ' + ${review.shopId.shopName}"></h3>
+            <p th:text="'住所: ' + ${review.shopId.address}"></p>
+        </div>
+
+        <!-- レビュー編集フォーム -->
+        <form th:action="@{/reviews/edit/{reviewNo}(reviewNo=${review.no})}" method="post">
+            <input type="hidden" name="shopId" th:value="${review.shopId.shopId}" /> <!-- 店舗IDを隠しフィールドで送信 -->
+
+            <!-- 評価レート（☆） -->
+            <div class="rating">
+                <label for="rating">評価:</label>
+                <span class="star-rating">
+                    <input type="radio" name="rating" value="5" id="star1" class="star" th:checked="${review.rate == 5}" />
+                    <label for="star1">&#9733;</label>
+
+                    <input type="radio" name="rating" value="4" id="star2" class="star" th:checked="${review.rate == 4}" />
+                    <label for="star2">&#9733;</label>
+
+                    <input type="radio" name="rating" value="3" id="star3" class="star" th:checked="${review.rate == 3}" />
+                    <label for="star3">&#9733;</label>
+
+                    <input type="radio" name="rating" value="2" id="star4" class="star" th:checked="${review.rate == 2}" />
+                    <label for="star4">&#9733;</label>
+
+                    <input type="radio" name="rating" value="1" id="star5" class="star" th:checked="${review.rate == 1}" />
+                    <label for="star5">&#9733;</label>
+                </span>
+            </div>
+
+            <!-- 評価内容 -->
+            <div class="review-item">
+                <label for="review-content" class="review-label">評価内容:　　　　</label>
+                <textarea id="review-content" name="reviewContent" class="review-input" rows="4" required th:text="${review.reviewContent}"></textarea>
+            </div>
+
+            <!-- 送信ボタン -->
+            <div class="review-item2">
+                <button type="submit" class="review-btn">更新する</button>
+            </div>
+        </form>
+
+        <!-- 戻るボタン -->
+        <div>
+            <a th:href="@{/reviewsAll}" class="shopinfo-btn">レビュー一覧に戻る</a>
+        </div>
+    </div>
+
+    <div th:replace="~{fragment::footer}"></div> <!-- フッター -->
+    <div th:replace="~{fragment::scripts}"></div>
+</body>
+</html>

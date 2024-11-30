@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragment::meta}"></div>
+    <div th:replace="~{fragment::styles}"></div>
+    <title>カテゴリ編集</title>
+    <style>
+        .edit-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+            padding: 20px;
+            background-color: #f4f7fc;
+        }
+        .edit-box {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 900px;
+        }
+        .edit-box h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn-base {
+            padding: 10px 20px;
+            background-color: #a0c8f0;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn-base:hover {
+            background-color: #7faedb;
+        }
+        .btn-base:active {
+            transform: translateY(0);
+        }
+        .error-message {
+            color: red;
+            font-size: 14px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <!-- ヘッダーの部品化 -------------------------------------------------> 
+    <div>
+        <nav class="navbar navbar-expand-md navbar-light bg-white">
+            <div class="headcontainer">
+                <a class="navbar-brand" th:href="@{/admin/base}">                         
+                    <img class="nagoyameshi-logo1" th:src="@{/images/nagoyameshi.png}" alt="NAGOYA Meshi">                         
+                </a>    
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">                                    
+                    <ul class="navbar-nav ms-auto">                                                                                     
+                        <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                            <a id="navbarDropdownGeneral" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <span>メニュー</span>
+                            </a>
+
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownGeneral">
+                                <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/admin/base}">ダッシュボード</a> 
+                                 
+                                <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    ログアウト
+                                </a>
+                                <form class="d-none" id="logout-form" th:action="@{/logout}" method="post"></form>                                     
+                            </div>
+                        </li>                       
+                    </ul>
+                </div>
+            </div>
+        </nav>    
+    </div>
+
+	<div class="container pt-4 pb-5 nagoyameshi-container">
+		     <div class="row justify-content-center">
+		         <div class="col-xl-5 col-lg-6 col-md-8">  
+		             
+
+		             <div th:if="${successMessage}" class="alert alert-info">
+		                 <span th:text="${successMessage}"></span>
+		             </div> 
+		             
+
+		             <div th:if="${errorMessage}" class="alert alert-danger">
+		                 <span th:text="${errorMessage}"></span>
+		             </div>
+		             
+
+		         </div>
+		     </div>
+		 </div>
+
+    <div class="edit-container">
+        <div class="edit-box">
+            <h2>カテゴリ編集</h2>
+
+            <!-- カテゴリ編集フォーム -->
+            <form action="/admin/category/update" method="post" th:action="@{/admin/category/update}">
+
+                <!-- カテゴリ名 -->
+                <div class="form-group">
+                    <label for="categoryName">カテゴリ名</label>
+                    <input type="text" id="categoryName" name="categoryName" th:value="${category.categoryName}" required>
+                </div>
+
+                <!-- 編集対象のカテゴリID（hidden）-->
+                <input type="hidden" id="categoryNo" name="categoryNo" th:value="${category.categoryNo}">
+
+                <!-- 提出ボタン -->
+                <button type="submit" class="btn-base">保存</button>
+            </form>
+
+            <!-- エラーメッセージ -->
+            <div class="error-message" th:if="${error != null}" th:text="${error}">保存に失敗しました。</div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragment::footer}"></div> <!-- フッター -->
+    <div th:replace="~{fragment::scripts}"></div>
+</body>
+</html>

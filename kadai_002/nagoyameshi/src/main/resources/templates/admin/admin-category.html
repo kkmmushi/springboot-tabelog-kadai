@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragment::meta}"></div>
+    <div th:replace="~{fragment::styles}"></div>
+    <title>カテゴリー管理</title>
+    <style>
+        .category-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+            padding: 20px;
+            background-color: #f4f7fc;
+        }
+        .category-box {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 800px;
+        }
+        .category-box h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn-base {
+            padding: 10px 20px;
+            background-color: #a0c8f0;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn-base:hover {
+            background-color: #7faedb;
+        }
+        .category-list {
+            margin-top: 30px;
+            width: 100%;
+            text-align: center;
+        }
+        .category-list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .category-list table, th, td {
+            border: 1px solid #ddd;
+        }
+        .category-list th, .category-list td {
+            padding: 10px;
+            text-align: left;
+        }
+        .category-list th {
+            background-color: #f4f7fc;
+        }
+        .category-actions button {
+            padding: 5px 10px;
+            margin-right: 5px;
+            background-color: #ffcc00;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .category-actions button.delete {
+            background-color: #f44336;
+        }
+        .category-actions button.edit {
+            background-color: #4CAF50;
+        }
+        /* ポップアップのスタイル */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        .popup-content {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .popup button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .popup .yes {
+            background-color: #f44336;
+            color: white;
+        }
+        .popup .no {
+            background-color: #4CAF50;
+            color: white;
+        }
+        /* 忠告ポップアップのスタイル */
+        .warning-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 998;
+        }
+        .warning-popup-content {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <nav class="navbar navbar-expand-md navbar-light bg-white">
+            <div class="headcontainer">
+                <a class="navbar-brand" th:href="@{/admin/base}">
+                    <img class="nagoyameshi-logo1" th:src="@{/images/nagoyameshi.png}" alt="NAGOYA Meshi">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                            <a id="navbarDropdownGeneral" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <span>メニュー</span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownGeneral">
+                                <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/admin/base}">ダッシュボード</a>
+                                <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">ログアウト</a>
+                                <form class="d-none" id="logout-form" th:action="@{/logout}" method="post"></form>
+                            </div>
+                        </li>                       
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    
+
+	<div class="container pt-4 pb-5 nagoyameshi-container">
+		     <div class="row justify-content-center">
+		         <div class="col-xl-5 col-lg-6 col-md-8">  
+		             
+		             <div th:if="${successMessage}" class="alert alert-info">
+		                 <span th:text="${successMessage}"></span>
+		             </div> 
+		             
+		             <div th:if="${errorMessage}" class="alert alert-danger">
+		                 <span th:text="${errorMessage}"></span>
+		             </div>
+		             
+		         </div>
+		     </div>
+		 </div>
+
+    <div class="category-container">
+        <div class="category-box">
+            <h2>カテゴリー管理</h2>
+
+            <!-- カテゴリー検索フォーム -->
+            <form action="/admin/category" method="get">
+                <div class="form-group">
+                    <input type="text" name="categoryName" placeholder="カテゴリー名で検索" value="検索名">
+                </div>
+                <button type="submit" class="btn-base">検索</button>
+            </form>
+
+            <!-- 新規カテゴリー登録ボタン -->
+            <a href="/admin/category/new" class="btn-base">新規カテゴリー登録</a>
+
+            <!-- カテゴリー一覧表示 -->
+            <div class="category-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>カテゴリー名</th>
+                            <th>作成日時</th>
+                            <th>更新日時</th>
+                            <th>アクション</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="category : ${categories}">
+                            <td th:text="${category.categoryName}">カテゴリー名</td>
+                            <td th:text="${category.createdAt}">作成日時</td>
+                            <td th:text="${category.updatedAt}">更新日時</td>
+                            <td class="category-actions">
+                                <!-- 編集ボタン -->
+                                <a href="/admin/category/edit/{no}" th:href="@{/admin/category/edit/{no}(no=${category.categoryNo})}" class="btn-base edit">編集</a>
+
+                                <!-- 削除ボタン -->
+                                <button class="btn-base delete" th:onclick="|showPopup(${category.categoryNo})|">削除</button>
+                                <form th:action="@{/admin/category/delete/{no}(no=${category.categoryNo})}" method="post" th:id="'delete-form-' + ${category.categoryNo}" style="display:none;"></form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- 最初のポップアップ -->
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <p>本当に削除しますか？</p>
+            <button class="yes" onclick="showWarningPopup()">はい</button>
+            <button class="no" onclick="closePopup()">いいえ</button>
+        </div>
+    </div>
+
+    <!-- 忠告ポップアップ -->
+    <div id="warning-popup" class="warning-popup">
+        <div class="warning-popup-content">
+            <p>カテゴリを削除したら関連する店舗も削除されます。本当によろしいですか？</p>
+            <button class="yes" onclick="confirmDelete()">はい</button>
+            <button class="no" onclick="closeWarningPopup()">いいえ</button>
+        </div>
+    </div>
+
+    <div th:replace="~{fragment::footer}"></div>
+    <div th:replace="~{fragment::scripts}"></div>
+
+    <script>
+        let categoryNoToDelete = null;
+
+        function showPopup(categoryNo) {
+            categoryNoToDelete = categoryNo;
+            document.getElementById('popup').style.display = 'flex';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+
+        function showWarningPopup() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('warning-popup').style.display = 'flex';
+        }
+
+        function closeWarningPopup() {
+            document.getElementById('warning-popup').style.display = 'none';
+            document.getElementById('popup').style.display = 'flex';
+        }
+
+        function confirmDelete() {
+            if (categoryNoToDelete !== null) {
+                let form = document.getElementById('delete-form-' + categoryNoToDelete);
+                if (form) {
+                    form.submit();
+                }
+            }
+            closeWarningPopup();
+        }
+    </script>
+</body>
+</html>

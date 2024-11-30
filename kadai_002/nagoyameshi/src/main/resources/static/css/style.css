@@ -1,0 +1,1371 @@
+/* ベースのスタイル */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    margin: 0;
+    padding: 0;
+}
+
+.shopcontainer {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+}
+
+.filters {
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.shop-list {
+    width: 70%;
+}
+
+.shop-item {
+    display: flex; /* 画像を左、情報を右に並べる */
+    align-items: flex-start;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.shop-item .shop-image {
+    flex-shrink: 0;
+    width: 150px; /* 画像のサイズ調整 */
+    height: 150px;
+    margin-right: 20px;
+}
+
+.shop-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 画像が枠にフィットするように調整 */
+    border-radius: 8px;
+}
+
+/* 店舗情報のスタイル */
+.shop-info {
+    flex-grow: 1;
+}
+
+.shop-info h2 {
+    font-size: 1.5em;
+    margin: 0;
+    color: #333;
+}
+
+.category-name {
+    background-color: #f8d7da;  /* 薄いピンク色 */
+    padding: 5px;
+    border-radius: 5px;
+    display: inline-block;
+    font-size: 1em;
+    margin-top: 10px;
+    color: #721c24;
+    font-weight: bold;
+}
+
+.shop-info p {
+    font-size: 1.1em;
+    margin: 5px 0;
+    color: #555;
+}
+
+/* ページネーション */
+.pagination {
+    display: flex;
+    justify-content: center; /* 中央寄せ */
+    margin-top: 20px;
+}
+
+.pagination span {
+    margin: 0 10px; /* 各ページリンクの間隔を広げる */
+}
+
+/* フィルターフォームのスタイル */
+.filters label, .filters select, .filters input, .filters button {
+    width: 100%;
+}
+
+.filters button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.filters button:hover {
+    background-color: #45a049;
+}
+
+
+/* ヘッダー部分 */
+.navbar {
+    height: 80px; /* ヘッダーの高さを設定 */
+    padding: 0 20px; /* ヘッダー内の左右パディング */
+    box-sizing: border-box; /* パディングを含めてサイズを決める */
+}
+
+/* ヘッダーのロゴ */
+.nagoyameshi-logo1 {
+    width: 150px; /* ロゴの幅を固定 */
+    height: auto; /* 高さは自動調整 */
+}
+
+/* ヘッダーナビゲーション */
+.headcontainer {
+    display: flex;
+    justify-content: space-between; /* ロゴとナビゲーションメニューの間にスペースを確保 */
+    align-items: right; /* アイテムを右に配置 */
+    height: 100%; /* 高さを100%に設定 */
+}
+
+.navbar-toggler {
+    border: none;
+    padding: 0; /* ボタンのパディングを調整 */
+}
+
+.navbar-nav {
+     margin-left: auto; /* ナビゲーションメニューを右寄せ */
+}
+
+/* 必要であれば、ボタンやリンクのサイズも調整 */
+.navbar-nav .nav-link {
+	align-items: right; 
+    font-size: 16px; /* フォントサイズの調整 */
+    padding: 10px 15px; /* パディングを調整 */
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: #f8f8f8; /* ホバー時の背景色 */
+}
+
+
+/* 画像リンクを中央に配置 */
+.image-container {
+    display: flex;
+    justify-content: center; /* 横方向に中央寄せ */
+    align-items: center; /* 縦方向に中央寄せ */
+    width: 100%; /* 親要素の幅を100%にする */
+    margin: 0 auto; /* 自動で左右中央寄せ */
+    text-align: center; /* 画像内のテキストも中央寄せにする（必要な場合） */
+}
+
+/* 画像のスタイル調整 */
+.image-container img {
+    max-width: 100%; /* 画像の最大幅を親要素の幅に合わせる */
+    height: auto; /* 高さを自動で調整 */
+}
+
+.nav-link{
+	display: flex;
+	 justify-content: right;
+}
+
+
+.nowpage {
+    font-size: 0.9em; /* 少し小さめの文字サイズ */
+    color: #4d4d4d; /* 濃い灰色（#4d4d4d） */
+}
+
+footer {
+    margin-top: 30px;  /* フッターの上にスペースを追加 */
+}
+
+
+
+    /* ボタンのスタイル */
+    .shopinfo-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #a0c8f0; /* 薄青色 */
+        color: #fff;
+        text-decoration: none;
+        border-radius: 30px;
+        font-size: 1.1rem;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .shopinfo-btn:hover {
+        background-color: #7faedb;
+        transform: translateY(-2px);
+    }
+
+    .shopinfo-btn:active {
+        transform: translateY(0);
+    }
+
+    /* 店舗詳細コンテナ */
+    .shopinfo-details-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    /* 画像表示 */
+    .shopinfo-image img {
+        max-width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 店舗詳細情報 */
+    .shopinfo-info {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .shopinfo-info h2 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .shopinfo-info p {
+        font-size: 16px;
+        margin: 10px 0;
+    }
+
+    .shopinfo-category-name {
+        font-weight: bold;
+        color: #555;
+    }
+
+    /* 詳細説明部分 */
+    .shopinfo-description {
+        margin-top: 20px;
+    }
+
+	.btn888 {
+		margin-top: 10px;
+		margin-bottom: 20px;
+	    display: inline-block;
+	    padding: 10px 20px;
+	    background-color: rgb(63, 190, 1); /* 薄緑色 */
+	    color: #fff; /* 白文字 */
+	    text-decoration: none; /* 下線を消す */
+	    border-radius: 30px; /* 楕円形に */
+	    font-size: 16px;
+	    text-align: center;
+	    transition: background-color 0.3s ease, transform 0.2s ease;
+	}
+
+	.btn888:hover {
+	    background-color: #76c76f; /* ホバー時の色（少し濃い緑） */
+	    transform: translateY(-2px); /* ホバー時に少し浮き上がる */
+	}
+
+	.btn888:active {
+	    transform: translateY(0); /* クリック時に元の位置に戻る */
+	}
+	
+	
+	/* 店舗詳細ページの基本レイアウト */
+	.shopinfo-details-container {
+	    display: flex;
+	    flex-direction: column; /* 画像と詳細情報を縦並びに */
+	    justify-content: flex-start; /* 縦方向は最初に配置（ここは必須） */
+	    gap: 20px;
+	    margin: 20px auto; /* 上下に20px、左右中央寄せ */
+	    align-items: center; /* 横方向に中央寄せ */
+	    width: 100%; /* 親の幅に合わせる */
+	    max-width: 1200px; /* 最大幅を設定 */
+		position: relative; /* 親要素を相対位置に */
+	}
+
+	/* 店舗の画像エリア */
+	.shopinfo-image img {
+	    max-width: 500px; /* 画像の最大幅を500pxに設定 */
+	    width: 100%; /* 画像を横幅いっぱいに広げる */
+	    height: auto;
+	    border-radius: 8px;
+	    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	}
+
+	/* 店舗情報エリア */
+	.shopinfo-info {
+	    padding: 20px;
+	    background-color: #f9f9f9;
+	    border-radius: 8px;
+	    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	    width: 100%; /* 幅を100%に設定して親の幅に合わせる */
+	    max-width: 800px; /* 最大幅を指定して、広がりすぎないように */
+	}
+
+	/* 店舗名（見出し） */
+	.shopinfo-info h2 {
+	    font-size: 24px;
+	    margin-bottom: 10px;
+	    color: #333;
+	}
+
+	/* 店舗情報の各項目 */
+	.shopinfo-info div, .shopinfo-info p {
+	    font-size: 16px;
+	    margin-bottom: 10px;
+	    color: #555;
+	}
+
+	/* 店舗情報のラベル */
+	.shopinfo-info label {
+	    font-weight: bold;
+	    color: #333;
+	}
+
+	/* 店舗の詳細説明 */
+	.shopinfo-description {
+	    margin-top: 20px;
+	    padding: 10px;
+	    background-color: #f0f0f0;
+	    border-radius: 8px;
+	    border-left: 4px solid #4CAF50; /* 詳細説明の強調 */
+	}
+
+	/* 詳細説明の見出し */
+	.shopinfo-description h3 {
+	    font-size: 20px;
+	    margin-bottom: 10px;
+	    color: #333;
+	}
+
+	/* 詳細説明の本文 */
+	.shopinfo-description p {
+	    font-size: 16px;
+	    color: #555;
+	}
+
+	/* 戻るボタン */
+	.shopinfo-btn {
+	    display: inline-block;
+	    padding: 10px 20px;
+	    background-color: #4CAF50;
+	    color: #fff;
+	    text-decoration: none;
+	    border-radius: 30px;
+	    font-size: 16px;
+	    text-align: center;
+	    margin-top: 20px;
+	    transition: background-color 0.3s;
+	}
+
+	/* 戻るボタンのホバーエフェクト */
+	.shopinfo-btn:hover {
+	    background-color: #45a049;
+	}
+	
+	
+	
+	
+	
+	.samuraitravel-container {
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	    min-height: 100vh;
+	}
+
+	.paiduser-text-center {
+	    font-size: 18px;
+	    color: #333;
+	    margin-bottom: 40px;  /* 余白を広げてカード入力フォームとの間隔を開ける */
+	}
+
+	.paiduser-input-box {
+	    border: 1px solid #ced4da;  /* 薄いグレーの枠線 */
+	    border-radius: 5px;  /* 丸みをつけた角 */
+	    padding: 15px;  /* 内側の余白 */
+	    font-size: 16px;  /* フォントサイズ */
+	    line-height: 1.5;
+	    width: 100%;
+	    box-sizing: border-box;  /* パディングとボーダーを含む */
+	    margin-bottom: 15px;  /* 下のマージンを少し広げる */
+	}
+
+	/* 入力ボックスがエラーの場合 */
+	.paiduser-input-box.StripeElement--invalid {
+	    border-color: #e74c3c;  /* エラー時の赤いボーダー */
+	}
+
+	/* カード情報入力ボックスを縦に並べる */
+	.paiduser-card-input-container {
+	    display: flex;
+	    flex-direction: column;  /* 縦に並べる */
+	    gap: 15px; /* ボックス間の隙間 */
+	}
+
+	/* ボタンのスタイル */
+	#paiduser-submit {
+	    background-color: #28a745;  /* 緑色のボタン */
+	    color: white;
+	    font-size: 18px;
+	    padding: 12px 24px;
+	    border: none;
+	    border-radius: 5px;
+	    width: 100%;
+	    cursor: pointer;
+	    transition: background-color 0.3s ease;
+	}
+
+	#paiduser-submit:hover {
+	    background-color: #218838;  /* ホバー時に少し暗くする */
+	}
+
+	/* 成功メッセージ、エラーメッセージのスタイル */
+	.paiduser-alert {
+	    font-size: 16px;
+	    padding: 15px;
+	    border-radius: 5px;
+	    margin-bottom: 20px;
+	}
+
+	.paiduser-alert-info {
+	    background-color: #e7f3fe;
+	    color: #31708f;
+	    border-color: #bce8f1;
+	}
+
+	.paiduser-alert-danger {
+	    background-color: #f8d7da;
+	    color: #721c24;
+	    border-color: #f5c6cb;
+	}
+	
+	/* お気に入りボタンの親要素を右寄せ */
+	.shopinfo-details-container .favorite-btn-wrapper {
+	    display: block;            /* flex ではなく block */
+	    text-align: right;         /* 右寄せ */
+	    width: 100%;               /* 幅を全体に広げて右寄せ */
+	}
+
+	/* お気に入りボタンのスタイル */
+	.favorite-btn {
+	    background-color: transparent; /* 背景色を透明に */
+	    color: rgb(112, 22, 61);                 /* 文字色をピンクに */
+	    border: none;                   /* 枠線を消す */
+	    font-size: 18px;                /* 文字サイズ */
+	    font-weight: bold;              /* 文字を太字に */
+	    padding: 10px 20px;             /* ボタンのパディング */
+	    cursor: pointer;               /* ポインターカーソル */
+	    transition: color 0.3s;         /* 色の変化にトランジション */
+	    display: inline-flex;           /* flex を使って横並びにする */
+	    justify-content: center;        /* テキストを中央寄せに */
+	    align-items: center;            /* 縦方向も中央寄せ */
+	}
+
+	/* ボタン内のテキスト */
+	.favorite-btn span {
+	    display: inline-block;          /* inline-blockにすることで横並びに */
+	    font-size: 18px;                /* テキストのサイズ */
+	    text-align: left;               /* テキストを左寄せに */
+	}
+
+	/* お気に入りボタンがアクティブな状態の場合 */
+	.favorite-btn.active {
+	    color: rgb(165, 33, 89);       /* アクティブ時の文字色 */
+	}
+
+	.favorite-btn:hover {
+	    color: rgb(165, 33, 89);       /* ホバー時に文字色が少し濃くなる */
+	}
+	
+	.likeshopcontainer {
+	    display: flex;
+	    justify-content: center; /* 中央に配置 */
+
+	}
+	
+	/* ページネーション全体 */
+	.likepagination {
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	    margin-top: 30px;
+	    padding: 10px 0;
+	}
+
+	/* ページネーションリンクのスタイル */
+	.likepagination a {
+	    display: inline-block;
+	    padding: 8px 16px;
+	    margin: 0 5px;
+	    text-decoration: none;
+	    background-color: #f0f0f0; /* 明るい背景色 */
+	    color: #007bff; /* 通常時のリンク色 */
+	    border-radius: 5px;
+	    border: 1px solid #ddd; /* 薄いグレーのボーダー */
+	    transition: background-color 0.3s ease, transform 0.2s ease;
+	}
+
+	/* ホバー時のリンクの背景色変更 */
+	.likepagination a:hover {
+	    background-color: #007bff; /* ホバー時の背景色 */
+	    color: white; /* ホバー時に文字色を白に */
+	    transform: translateY(-2px); /* ホバー時に少し浮き上がる */
+	}
+
+
+
+	/* 最初・前のページ・次のページ・最後のページボタンの間隔調整 */
+	.likepagination span {
+	    margin: 0 10px;
+	}
+
+	/* ページ番号表示のスタイル */
+	.likenowpage {
+	    text-align: center;
+	    margin-top: 10px;
+	    font-size: 16px;
+	}
+
+	/* ページネーション内のリンクがすべて中央に配置されるように調整 */
+	.likepagination span a {
+	    display: inline-flex;
+	    align-items: center;
+	    justify-content: center;
+	}
+
+	
+	.index-image-container {
+	    position: relative;  /* 画像を基準にして文字を配置する */
+	    display: inline-block; /* 画像のサイズに合わせてコンテンツを囲む */
+	    width: 100%; /* 親の幅に合わせる */
+	}
+
+	.index-shop-link {
+	    position: relative;
+	    display: block;
+	    text-align: center; /* 文字の位置を中央に配置 */
+	}
+
+	.index-shop-text {
+	    position: absolute;
+	    top: 50%;
+	    left: 50%;
+	    transform: translate(-50%, -50%);  /* 文字を完全に中央に */
+	    font-size: 1.5rem;  /* 文字のサイズ */
+	    color: white;  /* 文字色を白に */
+	    font-weight: bold;  /* 文字を太字に */
+	    background-color: rgba(0, 0, 0, 0.6);  /* 背景に半透明の黒 */
+	    padding: 10px 20px;  /* パディングを足してボタンみたいに */
+	    border-radius: 5px;  /* 角を丸く */
+	    text-decoration: none;  /* テキストリンクの下線を消す */
+	    transition: all 0.3s ease;  /* ホバー時のスムーズなアニメーション */
+	}
+
+	.index-shop-text:hover {
+	    background-color: rgba(0, 0, 0, 0.8);  /* ホバー時に背景色が濃くなる */
+	    transform: translate(-50%, -50%) scale(1.1);  /* ホバー時に文字が少し拡大 */
+	}
+
+	/* 予約フォーム */
+	.reservation-form {
+	    margin-top: 30px;
+	    padding: 20px;
+	    background-color: #f9f9f9;
+	    border-radius: 8px;
+		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+		width: 100%; /* 幅を100%に設定して親の幅に合わせる */
+		max-width: 800px; /* 最大幅を指定して、広がりすぎないように */
+	}
+
+	.reservation-form h3 {
+	    font-size: 1.4rem;
+	    font-weight: bold;
+	    margin-bottom: 20px;
+	    color: #333;
+	}
+
+	.reservation-item {
+	    margin-bottom: 15px;
+	    flex: 1; /* 横並びにするため、各項目に均等にスペースを割り当て */
+	}
+
+	.reservation-label {
+	    font-size: 1.1rem;
+	    font-weight: bold;
+	    display: block;
+	    margin-bottom: 8px;
+	    color: #333;
+	}
+
+	.reservation-input {
+	    width: 100%;
+	    padding: 8px;
+	    font-size: 1rem;
+	    border: 1px solid #ccc;
+	    border-radius: 4px;
+	    margin-bottom: 8px;
+	}
+
+	.reservation-input:focus {
+	    border-color: rgb(6, 140, 221);
+	    outline: none;
+	}
+
+	/* 予約フォーム内の項目を横並びにする */
+	.reservation-form form {
+	    display: flex;
+	    justify-content: space-between; /* 各項目に均等にスペースを */
+	    gap: 20px; /* 各項目の間にスペースを */
+	}
+
+	.reservation-btn {
+	    display: inline-block;
+	    padding: 10px 20px;
+	    font-size: 1.1rem;
+	    background-color: rgb(6, 140, 221);
+	    color: white;
+	    border: none;
+	    border-radius: 30px;
+	    cursor: pointer;
+	    transition: background-color 0.3s ease;
+		margin-top: 30px;
+		margin-left: 20px; 
+	}
+
+	.reservation-btn:hover {
+	    background-color: rgb(4, 95, 149);
+	}
+	
+	.shop-info-name {
+
+		font-size: 300%;
+		    font-weight: bold;
+	}
+
+	/* レビューフォーム */
+	.review-form {
+	    margin-top: 30px;
+	    padding: 20px;
+	    background-color: #f9f9f9;
+	    border-radius: 8px;
+	    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	    width: 100%;
+	    max-width: 1200px;
+	    display: flex;
+	    flex-direction: column;
+	    align-items: center;
+	}
+	
+	.review-form h3 {
+	    font-size: 1.4rem;
+	    font-weight: bold;
+	    margin-bottom: 20px;
+	    color: #333;
+		text-align: left; /* 左寄せ */
+		width: 100%; /* 親要素の幅に合わせる */
+		
+	}
+
+
+
+	.star:checked + label {
+	    color: #ffcc00; /* ★の色を黄色に */
+	}
+
+	/* レビュー内容 */
+	.review-item {
+	    width: 100%;
+	    margin-bottom: 20px;
+		align-items: center;
+	}
+
+	.review-label {
+	    font-size: 1.1rem;
+	    font-weight: bold;
+	    color: #333;
+	    display: flex;
+	    margin-bottom: 8px;
+	}
+
+	.review-input {
+		min-width: 370px; 
+		max-width: 500px; 
+	    padding: 10px;
+	    font-size: 1rem;
+	    border: 1px solid #ccc;
+	    border-radius: 4px;
+	    resize: vertical;
+	}
+	
+	/* 予約フォーム内の項目を横並びにする */
+	.review-form form {
+	    display: flex;
+	    justify-content: space-between; /* 各項目に均等にスペースを */
+	    gap: 20px; /* 各項目の間にスペースを */
+	}
+	
+
+	/* 送信ボタン */
+	.review-btn {
+		display: inline-block;
+		padding: 10px 20px;
+		font-size: 1.1rem;
+		background-color: rgb(6, 140, 221);
+		color: white;
+		border: none;
+		border-radius: 30px;
+		cursor: pointer;
+		transition: background-color 0.3s ease;
+		margin-top: 50px;
+		margin-left: 20px; 
+		align-items: center;
+	}
+
+	.review-btn:hover {
+	    background-color: rgb(4, 95, 149);
+	}
+
+	/* レビューと予約フォームのレイアウト */
+	.shopinfo-details-container {
+	    display: flex;
+	    flex-direction: column;
+	    align-items: center;
+	    gap: 20px;
+	    max-width: 1200px;
+	    margin: 0 auto;
+	}
+
+	.shopinfo-details-container .reservation-form,
+	.shopinfo-details-container .review-form {
+	    width: 100%;
+	    max-width: 1200px;
+	    margin-top: 30px;
+	}
+
+	
+		.rating {
+	    margin-bottom: 20px;
+	}
+
+	.star-rating {
+	    display: flex;
+	    justify-content: center;
+	    direction: rtl; /* 右から左に並べる */
+	}
+
+	.star {
+	    display: none; /* radioボタン自体を非表示にする */
+	}
+
+	/* ラベル（★）の初期状態 */
+	.star-rating label {
+	    font-size: 2rem;
+	    color: #ccc; /* デフォルトで灰色 */
+	    cursor: pointer;
+	    transition: color 0.3s ease;
+	}
+
+	/* クリックされた星と、それより左側の星を黄色にする */
+	.star:checked + label,
+	.star:checked ~ .star:checked + label {
+	    color: #ffcc00; /* 黄色に変わる */
+	}
+
+	/* ホバー時に、その星とそれより左側の星が黄色になる */
+	.star-rating label:hover,
+	.star-rating label:hover ~ label {
+	    color: #ffcc00; /* 黄色に変わる */
+	}
+
+	/* inputがチェックされた星を基準に、それより左のラベルを黄色にする */
+	.star:checked ~ label {
+	    color: #ffcc00; /* 右のチェックを受けたラベルも黄色に */
+	}
+	
+	.btn {
+	          display: inline-block;
+	          padding: 10px 20px;
+	          background-color: #a0c8f0; /* 薄青色 */
+	          color: #fff; /* 白文字 */
+	          text-decoration: none; /* 下線を消す */
+	          border-radius: 30px; /* 楕円形に */
+	          font-size: 16px;
+	          text-align: center;
+	          transition: background-color 0.3s ease, transform 0.2s ease;
+	      }
+
+	      .btn:hover {
+	          background-color: #7faedb; /* ホバー時の色 */
+	          transform: translateY(-2px); /* ホバー時に少し浮き上がる */
+	      }
+
+	      .btn:active {
+	          transform: translateY(0); /* クリック時に元の位置に戻る */
+	      }
+
+	      .pagination {
+	          display: flex;
+	          justify-content: center;
+	          margin-top: 20px;
+	      }
+
+	      .pagination a {
+	          padding: 2px 2px;
+	          text-decoration: none;
+	          border: 1px solid #ccc;
+	          margin: 0 5px;
+	      }
+
+
+
+	      .pagination a:hover {
+	          background-color: #007bff;
+	          color: white;
+	      }
+
+	      .nowpage {
+	          margin-top: 20px;
+	          text-align: center;
+	      }
+		  
+		  /* 予約確認ページのコンテナ */
+		  .reservation-confirmation-container {
+		      max-width: 800px;
+		      margin: 0 auto;
+		      padding: 30px;
+		      background-color: #ffffff;
+		      border-radius: 8px;
+		      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		      text-align: center;
+		  }
+
+
+
+
+		  /* ボタンの共通スタイル */
+		  .reserv-confirm-btn .reserv-back-btn .review-confirm-btn  {
+		      padding: 10px 20px;
+		      border: none;
+		      border-radius: 5px;
+		      cursor: pointer;
+		      font-size: 16px;
+		      font-weight: bold;
+		      margin: 10px;
+		      transition: background-color 0.3s ease;
+		  }
+
+		  /* 確定ボタンのスタイル */
+		  .reserv-confirm-btn {
+		      background-color: #81C784; /* 薄いグリーン */
+		      color: #fff;
+		      padding: 12px 24px; /* ボタンのサイズを大きく */
+		      border-radius: 30px; /* 楕円形にする */
+		      font-size: 16px; /* 文字サイズを少し大きく */
+		      border: none; /* ボーダーなし */
+		      cursor: pointer; /* ポインタを表示 */
+		      transition: background-color 0.3s ease, transform 0.2s ease; /* ホバー時の変化 */
+		  }
+
+		  .reserv-confirm-btn:hover {
+		      background-color: #66bb6a; /* 少し濃いグリーン */
+		      transform: scale(1.05); /* ホバー時に少し大きく */
+		  }
+
+		  /* 戻るボタンのスタイル */
+		  .reserv-back-btn {
+		      margin-top: 5px;
+			  background-color: #E57373; /* 薄い赤 */
+		      color: #fff;
+		      padding: 12px 24px; /* ボタンのサイズを大きく */
+		      border-radius: 30px; /* 楕円形にする */
+		      font-size: 16px; /* 文字サイズを少し大きく */
+		      border: none; /* ボーダーなし */
+		      cursor: pointer; /* ポインタを表示 */
+		      transition: background-color 0.3s ease, transform 0.2s ease; /* ホバー時の変化 */
+		  }
+
+		  .reserv-back-btn:hover {
+		      background-color: #ef5350; /* 少し濃い赤 */
+		      transform: scale(1.05); /* ホバー時に少し大きく */
+		  }
+
+
+
+		  /* リンクのスタイル (店舗詳細ページへのリンク) */
+		  .reserv-a-2 {
+		      font-size: 16px;
+		      color: #007bff; /* 薄い青 */
+		      text-decoration: none;
+		  }
+
+		  .reserv-a-2:hover {
+		      text-decoration: underline;
+		  }
+
+		  /* 予約ページのスタイル */
+		  .reserv-h2 {
+		      font-size: 28px;
+		      color: #4CAF50;
+		      margin-bottom: 20px;
+		  }
+
+		  .reserv-div {
+		      font-size: 18px;
+		      color: #555;
+		      margin: 10px 0;
+		  }
+		
+
+		  /* 予約一覧のCSS */
+		    
+		  /* 予約一覧のCSS */
+		  .reservlist-container {
+		      padding: 20px;
+		  }
+
+		  .reservlist-title {
+		      font-size: 24px;
+		      font-weight: bold;
+		  }
+
+		  .reservlist-list {
+		      display: flex;
+		      flex-direction: column;
+		  }
+
+		  .reservlist-item {
+		      margin-bottom: 20px;
+		      padding: 10px;
+		      border: 1px solid #ddd;
+		      border-radius: 5px;
+		      display: flex;
+		      justify-content: space-between; /* 左側に予約情報、右側にボタンを配置 */
+		      align-items: center; /* 縦方向に中央揃え */
+		  }
+
+		  .reservlist-shop-info {
+		      display: flex;
+		      gap: 20px; /* 各項目の間にスペースを入れる */
+		      font-size: 16px; /* 予約情報のフォントサイズを大きめに設定 */
+		      justify-content: flex-end; /* 予約情報を右寄せ */
+		  }
+
+		  .reservlist-reservation-day,
+		  .reservlist-reservation-time,
+		  .reservlist-reservation-persons {
+		      font-size: 16px; /* 予約日、時間、人数を大きくする */
+		  }
+
+		  .reservlist-btn {
+		      display: inline-block;
+		      background-color: #e74c3c;
+		      color: white;
+		      padding: 10px;
+		      text-decoration: none;
+		      border-radius: 5px;
+		  }
+
+		  .reservlist-pagination {
+		      margin-top: 20px;
+		      text-align: center;
+		  }
+
+		  .reservlist-page-link {
+		      padding: 5px 10px;
+		      margin: 0 5px;
+		      text-decoration: none;
+		  }
+
+		  .reservlist-current {
+		      font-weight: bold;
+		  }
+
+		  .reservlist-shop-name {
+		      font-size: 24px;
+			  font-weight: bold;
+		      color: rgb(120, 120, 120); /* 店名の色を薄いグレーに変更 */
+		  }
+		  
+		  
+		  
+		  
+		  /* リンクのスタイル (店舗詳細ページへのリンク) */
+		  	  .review-a {
+		  	      font-size: 16px;
+		  	      color: #007bff; /* 薄い青 */
+		  	      text-decoration: none;
+		  	  }
+
+		  	  .reserv-a:hover {
+		  	      text-decoration: underline;
+		  	  }
+
+	
+		  	  .reserv-h2 {
+		  	      font-size: 28px;
+		  	      color: #4CAF50;
+		  	      margin-bottom: 20px;
+		  	  }
+
+		  	  .reserv-p {
+		  	      font-size: 18px;
+		  	      color: #555;
+		  	      margin: 10px 0;
+		  	  }
+
+		  	  .reserv-span {
+		  	      color: #333;
+		  	  }
+
+		  	  .reserv-h2 {
+		  	      font-size: 28px;
+		  	      color: #4CAF50;
+		  	      margin-bottom: 20px;
+		  	  }
+
+		  	  .reserv-div {
+		  	      font-size: 18px;
+		  	      color: #555;
+		  	      margin: 10px 0;
+		  	  }
+			  
+			/* 以下レビュー一覧*/
+			
+			
+			
+  
+			/* レビューアイテム全体 */
+			.reviewlist-item {
+			    display: flex;
+			    flex-direction: row;
+			    justify-content: space-between;
+			    align-items: center;
+			    padding: 15px;
+			    border-bottom: 1px solid #ddd;
+			}
+
+			/* 店舗情報とレビュー内容を横並びに */
+			.reviewlist-shop-info {
+			    flex-grow: 1;
+			    margin-right: 20px;  /* ボタンとの間にスペース */
+			}
+
+			/* レビュー内容のテキストを横並びに */
+			.reviewlist-review-content {
+			    white-space: nowrap; /* テキストを折り返さない */
+			    overflow: hidden;
+			    text-overflow: ellipsis; /* 長すぎるテキストを省略表示 */
+			    max-width: 300px; /* 最大幅を設定して省略を強制 */
+			}
+
+			/* アクションボタン */
+			.reviewlist-action-buttons {
+			    display: flex;
+			    justify-content: flex-start;
+			    gap: 10px; /* ボタンの間隔 */
+			}
+
+			/* ボタンスタイル */
+			.reviewlist-btn {
+			    padding: 10px 20px;
+			    font-size: 16px;
+			    border-radius: 5px;
+			    cursor: pointer;
+			    border: none;
+			    transition: background-color 0.3s ease;
+			}
+
+			/* 編集ボタン */
+			.reviewlist-btn-edit {
+			    background-color: #007bff;
+			    color: #fff;
+			}
+
+			.reviewlist-btn-edit:hover {
+			    background-color: #0056b3;
+			}
+
+			/* 削除ボタン */
+			.reviewlist-btn-delete {
+			    background-color: #dc3545;
+			    color: #fff;
+			}
+
+			.reviewlist-btn-delete:hover {
+			    background-color: #c82333;
+			}
+
+			/* レビューリストタイトル */
+			.reviewlist-title {
+			    font-size: 24px;
+			    font-weight: bold;
+			    margin-bottom: 20px;
+			}
+
+			/* レビューリストのリスト全体 */
+			.reviewlist-list {
+			    display: flex;
+			    flex-direction: column;
+			    gap: 15px; /* アイテム間のスペース */
+			}
+
+			/* レビューリストの各アイテム */
+			.reviewlist-item {
+			    display: flex;
+			    flex-wrap: wrap;
+			    justify-content: space-between;
+			    align-items: center;
+			}
+
+			/* レビューの日付や評価のスタイル */
+			.reviewlist-review-date,
+			.reviewlist-review-rating {
+			    font-size: 14px;
+			    color: #666;
+			}
+
+			/* ページネーション */
+			.reviewlist-pagination {
+			    text-align: center;
+			    margin-top: 20px;
+			}
+
+			.reviewlist-page-link {
+			    padding: 5px 10px;
+			    margin: 0 5px;
+			    text-decoration: none;
+			    color: #007bff;
+			}
+
+			.reviewlist-page-link:hover {
+			    background-color: #f1f1f1;
+			    border-radius: 5px;
+			}
+
+			.reviewlist-current {
+			    font-weight: bold;
+			}
+		  
+			/* ボタンスタイル */
+						.reviewlist-btn {
+						    padding: 10px 20px;
+						    font-size: 16px;
+						    border-radius: 5px;
+						    cursor: pointer;
+						    border: none;
+						    transition: background-color 0.3s ease;
+						}
+
+
+						
+						.reviewlist-btn:hover {
+						    opacity: 0.8;
+						}
+
+						/* 編集ボタン */
+						.reviewlist-btn-edit {
+						    background-color: rgb(83, 165, 255);
+						    color: #fff;
+						}
+
+						.reviewlist-btn-edit:hover {
+						    background-color: #0056b3;
+						}
+
+						/* 削除ボタン */
+						.reviewlist-btn-delete {
+						    background-color: rgb(230, 108, 120);
+						    color: #fff;
+						}
+
+						.reviewlist-btn-delete:hover {
+						    background-color: #c82333;
+						}
+				
+						
+						/* 予約確認ページのコンテナ */
+						.review-confirmation-container  {
+						    max-width: 800px;
+						    margin: 0 auto;
+						    padding: 30px;
+						    background-color: #ffffff;
+						    border-radius: 8px;
+						    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+						    text-align: center;
+						}
+
+						/* 予約確認ページのコンテナ */
+						.review-edit-container  {
+						    max-width: 800px;
+						    margin: 0 auto;
+						    padding: 30px;
+						    background-color: #ffffff;
+						    border-radius: 8px;
+						    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+						    text-align: center;
+						}
+						
+						
+						/* 確定ボタンのスタイル */
+						.review-confirm-btn {
+						    background-color: #81C784; /* 薄いグリーン */
+						    color: #fff;
+						    padding: 12px 24px; /* ボタンのサイズを大きく */
+						    border-radius: 30px; /* 楕円形にする */
+						    font-size: 16px; /* 文字サイズを少し大きく */
+						    border: none; /* ボーダーなし */
+						    cursor: pointer; /* ポインタを表示 */
+						    transition: background-color 0.3s ease, transform 0.2s ease; /* ホバー時の変化 */
+						}
+						
+						
+						.star-filled {
+						    color: gold;
+						    font-size: 2em; /* 星を2倍のサイズに */
+						}
+
+						.star-empty {
+						    color: lightgray;
+						    font-size: 2em; /* 星を2倍のサイズに */
+						}
+						
+						
+						
+						
+						/* レビュー */
+							.shop-reviews {
+							    margin-top: 30px;
+							    padding: 20px;
+							    background-color: #f9f9f9;
+							    border-radius: 8px;
+								box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+								width: 100%; /* 幅を100%に設定して親の幅に合わせる */
+								max-width: 800px; /* 最大幅を指定して、広がりすぎないように */
+							}
+
+							.shop-reviews h3 {
+							    font-size: 1.4rem;
+							    font-weight: bold;
+							    margin-bottom: 20px;
+							    color: #333;
+							}
+
+							/* レビュー一覧 */
+							.shop-reviews {
+							    margin-top: 30px;
+							    padding: 20px;
+							    background-color: #f9f9f9;
+							    border-radius: 8px;
+							    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+							    width: 100%; /* 幅を100%に設定して親の幅に合わせる */
+							    max-width: 800px; /* 最大幅を指定して、広がりすぎないように */
+							}
+
+							/* 見出し */
+							.shop-reviews h3 {
+							    font-size: 1.4rem;
+							    font-weight: bold;
+							    margin-bottom: 20px;
+							    color: #333;
+							}
+
+							/* レビューアイテム */
+							.review-item {
+							    display: flex; /* 横並びにする */
+								flex: 1;
+							    align-items: center; /* アイテムを中央揃え */
+							    margin-bottom: 20px;
+							    padding: 10px 0;
+							
+							}
+
+							/* レビュアー名 */
+							.reviewer-name {
+							    font-weight: bold;
+							    margin-right: 10px; /* レビュアー名と次の要素の間隔 */
+							}
+
+							/* 評価部分 */
+							.review-rating {
+							    margin-right: 10px; /* 評価と次の要素の間隔 */
+							}
+
+							/* レビュー内容 */
+							.review-content {
+								flex-grow: 1; /* 内容部分が残りのスペースを占める */
+							    margin-right: 10px; /* 内容と投稿日時の間隔 */
+							    font-size: 1rem;
+							    color: #555;
+							}
+
+							/* 投稿日 */
+							.review-date {
+							    font-size: 0.9rem;
+							    color: #888;
+							}
+
+							/* 評価の星のサイズ */
+							.star-rating {
+							    color: gold;
+							    font-size: 1.5rem; /* 星のサイズを調整 */
+							}
+							
+							
+							/* レビューアイテム全体 */
+							.review-item {
+								
+							    align-items: center;
+							    padding: 15px;
+						
+							}
+							
+							.review-btn {
+								display: flex; /* 横並びにする */
+							    padding: 10px 20px;
+								align-items: center;
+							    font-size: 16px;
+							    cursor: pointer;
+							    border: none;
+							    transition: background-color 0.3s ease;
+							}
+							
+							.review-item2 {
+							    display: flex;
+							    justify-content: center;  /* 中央揃え */
+							    align-items: center;      /* 縦方向に中央揃え */
+							    margin-top: 20px;         /* 上に少し余白を追加 */
+							}
+							
+
+							/* 予約完了ページのスタイル */
+							.reserv-container3 {
+								max-width: 800px;
+								margin: 0 auto;
+								padding: 30px;
+								background-color: #ffffff;
+								border-radius: 8px;
+								box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+								text-align: center;
+
+													display: flex;
+													    justify-content: center;  /* 中央揃え */
+													    align-items: center;      /* 縦方向に中央揃え */
+												}
+
+							
+							
+							.reserv-h2-2 {
+							    font-size: 28px;
+							    color: #4CAF50;
+							    margin-bottom: 20px;
+							}
+
+							.reserv-p-2 {
+							    font-size: 18px;
+							    color: #555;
+							    margin: 10px 0;
+							}
+
+							.reserv-span-2 {
+							    color: #333;
+							}

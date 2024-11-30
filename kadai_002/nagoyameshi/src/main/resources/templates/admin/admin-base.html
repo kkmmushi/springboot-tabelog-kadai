@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragment::meta}"></div>
+    <div th:replace="~{fragment::styles}"></div>
+    <title>管理者ベース画面</title>
+    <style>
+        .base-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #f4f7fc;
+        }
+        .base-box {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        .base-box h2 {
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .btn-base {
+            display: block;
+            width: 100%;
+            margin: 15px 0;
+            padding: 15px;
+            font-size: 18px;
+            background-color: #a0c8f0;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .btn-base:hover {
+            background-color: #7faedb;
+            transform: translateY(-2px);
+        }
+        .btn-base:active {
+            transform: translateY(0);
+        }
+        .btn-base:focus {
+            outline: none;
+        }
+        .footer-links {
+            margin-top: 20px;
+        }
+        .footer-links a {
+            text-decoration: none;
+            color: #7faedb;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+	<!-- ヘッダーの部品化 ------------------------------------------------->
+	<div>
+	    <nav class="navbar navbar-expand-md navbar-light bg-white">
+	        <div class="headcontainer">
+	            <a class="navbar-brand" th:href="@{/admin/base}">                        
+	                <img class="nagoyameshi-logo1" th:src="@{/images/nagoyameshi.png}" alt="NAGOYA Meshi">                        
+	            </a>    
+	            
+	            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	                <span class="navbar-toggler-icon"></span>
+	            </button>
+	            
+	            <div class="collapse navbar-collapse" id="navbarSupportedContent">                                    
+	                <ul class="navbar-nav ms-auto">                                                                                    
+	                    
+	                    <!-- ログイン済みであれば表示する --> 
+	                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+	                        <a id="navbarDropdownGeneral" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+	                            <span>メニュー</span>
+	                        </a>
+
+	                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownGeneral">
+                                <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/admin/base}">ダッシュボード</a> 
+	                            
+	                            <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+	                                ログアウト
+	                            </a>
+	                            <form class="d-none" id="logout-form" th:action="@{/logout}" method="post"></form>                                     
+	                        </div>
+	                    </li>                       
+	                </ul>
+	            </div>
+	        </div>
+	    </nav>    
+	</div>
+
+    <div class="base-container">
+        <div class="base-box">
+            <h2>管理者ダッシュボード</h2>
+            
+            <!-- 店舗管理ボタン -->
+            <a href="/admin/shop" class="btn-base">店舗管理</a>
+            
+            <!-- カテゴリ管理ボタン -->
+            <a href="/admin/category" class="btn-base">カテゴリ管理</a>
+            
+            <!-- 会員管理ボタン -->
+            <a href="/admin/user" class="btn-base">会員管理</a>
+        </div>
+
+        <!-- フッターリンク（ログアウトなど） -->
+        <div class="footer-links">
+            <a href="/admin/logout">ログアウト</a>
+        </div>
+    </div>
+
+    <div th:replace="~{fragment::footer}"></div> <!-- フッター -->
+    <div th:replace="~{fragment::scripts}"></div>
+</body>
+</html>

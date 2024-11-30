@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+	<div th:replace="~{fragment::meta}"></div>
+	<div th:replace="~{fragment::styles}"></div>
+    <title>レビュー確認</title>
+</head>
+<body>
+	<div th:replace="~{fragment::header}"></div> <!-- ヘッダー -->
+ 
+	<div class="review-confirmation-container">
+	   <div class="reserv-div">
+        <h2 class="reserv-h2">レビュー確認</h2>
+        <p class="reserv-p"><strong>店舗名:</strong> <span th:text="${shop.shopName}"></span></p>
+        <p  class="reserv-p"><strong>評価:</strong> <span th:text="${rating}"></span> / 5</p>
+        <p  class="reserv-p"><strong>レビュー内容:</strong></p>
+        <p  class="reserv-p" th:text="${reviewContent}"></p>
+
+
+        <!-- 投稿ボタン -->
+        <form th:action="@{/submit-review-final}" method="post">
+            <input type="hidden" name="shopId" th:value="${shop.shopId}" />
+            <input type="hidden" name="rating" th:value="${rating}" />
+            <input type="hidden" name="reviewContent" th:value="${reviewContent}" />
+            <button class="review-confirm-btn" type="submit">レビューを投稿</button>
+        </form>
+
+        <!-- キャンセルボタン -->
+        <a href="#" onclick="window.history.back();">キャンセル</a>
+    </div>
+	</div>
+	<div th:replace="~{fragment::footer}"></div> <!-- フッター -->
+	<div th:replace="~{fragment::scripts}"></div>
+</body>
+</html>

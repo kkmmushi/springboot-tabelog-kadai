@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragment::meta}"></div>
+    <div th:replace="~{fragment::styles}"></div>
+    <title>会員管理</title>
+    <style>
+        .member-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+            padding: 20px;
+            background-color: #f4f7fc;
+        }
+        .member-box {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 1000px;
+        }
+        .member-box h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn-base {
+            padding: 10px 20px;
+            background-color: #a0c8f0;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn-base:hover {
+            background-color: #7faedb;
+        }
+        .btn-base:active {
+            transform: translateY(0);
+        }
+        .member-list {
+            margin-top: 30px;
+            width: 100%;
+            text-align: center;
+        }
+        .member-list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .member-list table, th, td {
+            border: 1px solid #ddd;
+        }
+        .member-list th, .member-list td {
+            padding: 10px;
+            text-align: left;
+        }
+        .member-list th {
+            background-color: #f4f7fc;
+        }
+    </style>
+</head>
+<body>
+	<!-- ヘッダーの部品化 ------------------------------------------------->
+	<div>
+	    <nav class="navbar navbar-expand-md navbar-light bg-white">
+	        <div class="headcontainer">
+	            <a class="navbar-brand" th:href="@{/admin/base}">                        
+	                <img class="nagoyameshi-logo1" th:src="@{/images/nagoyameshi.png}" alt="NAGOYA Meshi">                        
+	            </a>    
+	            
+	            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	                <span class="navbar-toggler-icon"></span>
+	            </button>
+	            
+	            <div class="collapse navbar-collapse" id="navbarSupportedContent">                                    
+	                <ul class="navbar-nav ms-auto">                                                                                    
+	                    
+	                    <!-- ログイン済みであれば表示する --> 
+	                    <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+	                        <a id="navbarDropdownGeneral" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+	                            <span>メニュー</span>
+	                        </a>
+
+	                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownGeneral">
+	                            <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/admin/base}">ダッシュボード</a> 
+	                            
+	                            <a class="dropdown-item nagoyameshi-dropdown-item" th:href="@{/logout}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+	                                ログアウト
+	                            </a>
+	                            <form class="d-none" id="logout-form" th:action="@{/logout}" method="post"></form>                                     
+	                        </div>
+	                    </li>                       
+	                </ul>
+	            </div>
+	        </div>
+	    </div>
+
+    <div class="member-container">
+        <div class="member-box">
+            <h2>会員管理</h2>
+            
+            <!-- 会員検索フォーム -->
+            <form action="/admin/user" method="get">
+                <div class="form-group">
+                    <input type="text" name="memberName" placeholder="会員名で検索" value="検索名">
+                </div>
+                <button type="submit" class="btn-base">検索</button>
+            </form>
+
+            <!-- 会員一覧表示 -->
+            <div class="member-list">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>会員名</th>
+                            <th>メールアドレス</th>
+                            <th>電話番号</th>
+                            <th>登録日</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="member : ${members}">
+                            <td th:text="${member.name}">会員名</td>
+                            <td th:text="${member.email}">メールアドレス</td>
+                            <td th:text="${member.phoneNumber}">電話番号</td>
+                            <td th:text="${#dates.format(member.createdAt, 'yyyy-MM-dd')}">登録日</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{fragment::footer}"></div> <!-- フッター -->
+    <div th:replace="~{fragment::scripts}"></div>
+</body>
+</html>

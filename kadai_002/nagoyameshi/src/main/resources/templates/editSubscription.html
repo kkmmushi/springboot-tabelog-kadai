@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>クレジットカード情報編集</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <h1>クレジットカード情報編集</h1>
+    <form id="payment-form" th:action="@{/updateCard}" method="POST">
+        <!-- CSRF トークンの追加 -->
+        <input type="hidden" name="_csrf" th:value="${_csrf.token}">  <!-- CSRFトークン -->
+        
+        <div id="card-element">
+            <!-- Stripe Elementsでカード情報を入力 -->
+        </div>
+        <button type="submit" id="submit">カード情報を更新</button>
+    </form>
+
+    <script>
+        // Thymeleaf式で公開鍵を埋め込む
+        const stripePublicKey = "[[${stripePublicKey}]]"; // Springから渡された公開鍵を取得
+
+        if (!stripePublicKey || stripePublicKey.trim() === '') {
+            console.error("Stripe公開鍵が設定されていません。");
+        } else {
+            // Stripeの初期化
+            var stripe = Stripe(stripePublicKey); // 公開可能キーを使用
+            var elements = stripe.elements();
+            var card = elements.create('card');
+            card.mount('#card-element');
+
+            var form = document.getElementById('payment-form');
+            console.log(form instanceof HTMLFormElement);  // trueが出力されるはず
+
+            var isSubmitting = false;  // 送信中フラグ
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();  // 通常のフォーム送信を防ぐ
+
+                if (isSubmitting) {
+                    return;  // 送信中は何もしない
+                }
+                isSubmitting = true;  // 送信中フラグを立てる
+
+                // フォーム送信前にログを追加
+                console.log("Sending request to /updateCard");
+
+                stripe.createToken(card).then(function(result) {
+                    if (result.error) {
+                        alert(result.error.message);
+                        isSubmitting = false;  // エラーが発生した場合は送信中フラグを戻す
+                    } else {
+                        var token = result.token.id;
+                        console.log('Generated Token:', token);  
+
+                        var hiddenInput = document.createElement('input');
+                        hiddenInput.setAttribute('type', 'hidden');
+                        hiddenInput.setAttribute('name', 'stripeToken');
+                        hiddenInput.setAttribute('value', token);
+                        form.appendChild(hiddenInput);
+
+                        // CSRFトークンをヘッダーに追加
+                        var csrfToken = document.querySelector('input[name="_csrf"]').value;
+
+                        // FormData を使ってフォームを送信
+                        var formData = new FormData(form);
+                        console.log("Form data ready to send:", formData);
+
+                        fetch('/updateCard', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken  // CSRFトークンをヘッダーに追加
+                            },
+                            body: formData  // FormDataを送信
+                        })
+                        .then(response => {
+                            if (response.redirected) {
+                                // レスポンスにリダイレクトURLが含まれている場合
+                                window.location.href = response.url;  // リダイレクト先に遷移
+                            } else {
+                                return response.text();  // 通常のレスポンスを処理
+                            }
+                        })
+                        .then(data => {
+                            console.log("Response received:", data);
+                            // レスポンスに基づいた処理を追加
+                            isSubmitting = false;  // 送信中フラグを戻す
+                        })
+                        .catch(error => {
+                            console.error('Error during fetch:', error);
+                            isSubmitting = false;
+                        });
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>
