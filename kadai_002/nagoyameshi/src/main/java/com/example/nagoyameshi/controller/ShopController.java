@@ -1,5 +1,6 @@
 package com.example.nagoyameshi.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -17,9 +18,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.nagoyameshi.entity.Category;
+import com.example.nagoyameshi.entity.Review;
 import com.example.nagoyameshi.entity.Shop;
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.repository.LikeRepository;
+import com.example.nagoyameshi.repository.ReviewRepository;
+import com.example.nagoyameshi.repository.UserRepository;
 import com.example.nagoyameshi.security.UserDetailsImpl;
 import com.example.nagoyameshi.service.CategoryService;
 import com.example.nagoyameshi.service.ShopService;
@@ -32,6 +36,12 @@ public class ShopController {
 
     @Autowired
     private LikeRepository likeRepository;
+    @Autowired
+    private ReviewRepository reviewRepository;
+    @Autowired
+    private UserRepository userRepository;
+
+    
 
     public ShopController(ShopService shopService, CategoryService categoryService) {
         this.shopService = shopService;
@@ -150,6 +160,26 @@ public class ShopController {
             // 認証されていない場合
             model.addAttribute("isFavorite", false);  // 仮にfalseをセット
         }
+        
+        
+        // 店舗の全レビューを取得
+        List<Review> reviews = reviewRepository.findByShopIdOrderByCreatedAtDesc(shop);
+        model.addAttribute("reviews", reviews);
+        
+     // ユーザー情報をマップで取得
+        Map<Integer, User> userMap = new HashMap<>();
+        for (Review review : reviews) {
+            User user = review.getUserId();  // userId は User 型なので、そのまま取得
+            if (user != null) {
+                userMap.put(user.getId(), user);  // User の ID をキーとして格納
+            }
+        }
+
+
+        // 4件までレビューを表示
+        model.addAttribute("topReviews", reviews.stream().limit(4).collect(Collectors.toList()));
+        model.addAttribute("reviews", reviews);
+        model.addAttribute("userMap", userMap);  // ユーザー情報をマップで渡す
 
         return "shop-detail";  // 店舗詳細ページのテンプレート
     }
@@ -184,4 +214,21 @@ public class ShopController {
         // 認証情報が無い場合はログイン画面へリダイレクト
         return "redirect:/login";
     }
+    
+    
+    @GetMapping("/reviews/{shopId}")
+    public String showAllReviews(@PathVariable Integer shopId, Model model) {
+        // 店舗情報を取得
+        Shop shop = shopService.getShopById(shopId);
+        model.addAttribute("shop", shop);
+
+        // すべてのレビューを取得
+        List<Review> reviews = reviewRepository.findByShopIdOrderByCreatedAtDesc(shop);
+        model.addAttribute("reviews", reviews);
+
+        return "reviews-detail";  // レビュー一覧ページのテンプレート
+    }
+    
+    
+    
 }

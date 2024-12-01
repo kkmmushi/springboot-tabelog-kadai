@@ -34,6 +34,12 @@ public class WebSecurityConfig {
                 .permitAll()                            // ログインページは誰でもアクセス可能
             )
             
+            
+            // 匿名認証を無効化
+            .securityContext(securityContext -> securityContext
+                .requireExplicitSave(false) // 必要に応じて、セッションに保存しない設定も可能
+            )
+            
            
             .logout(logout -> logout
                 .logoutUrl("/logout")                   // ログアウトのURL

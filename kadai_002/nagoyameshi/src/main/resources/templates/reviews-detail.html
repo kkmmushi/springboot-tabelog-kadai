@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="~{fragment::meta}"></div>
+    <div th:replace="~{fragment::styles}"></div>
+    <title>レビュー一覧</title>
+</head>
+<body>
+	<div th:replace="~{fragment::header}"></div> <!-- ヘッダー -->
+
+    <!-- タイトル -->
+    <h2 class="reviewsAll-title">レビュー一覧</h2>
+
+    <div class="reviewsAll-reviews-container">
+        <div th:each="review : ${reviews}">
+            <div class="reviewsAll-review-item">
+                <div class="reviewsAll-review-header">
+                    <p class="reviewsAll-review-user"><strong th:text="${review.userId.name}"></strong></p>
+                    <p class="reviewsAll-review-date"><span th:text="${#dates.format(review.createdAt, 'yyyy-MM-dd')}"></span></p>
+                </div>
+                <div class="reviewsAll-review-rating">
+                    <span th:each="i : ${#numbers.sequence(1, review.rate)}" class="reviewsAll-star">★</span>
+                </div>
+                <p class="reviewsAll-review-content" th:text="${review.reviewContent}"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 戻るボタン -->
+    <a th:href="@{/shop/{shopId}(shopId=${shop.shopId})}" class="reviewsAll-back-button">店舗詳細に戻る</a>
+	
+	<div th:replace="~{fragment::footer}"></div> <!-- フッター -->
+	<div th:replace="~{fragment::scripts}"></div>
+
+</body>
+</html>

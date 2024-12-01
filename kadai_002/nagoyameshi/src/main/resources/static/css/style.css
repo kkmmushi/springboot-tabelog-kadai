@@ -1369,3 +1369,180 @@ footer {
 							.reserv-span-2 {
 							    color: #333;
 							}
+							
+							
+		
+							/* タイトルの中央寄せ */
+							.reviewsAll-title {
+							    text-align: center;
+							    font-size: 2em;
+							    margin-top: 30px;
+							    margin-bottom: 30px;
+							}
+
+							/* レビュー一覧コンテナ */
+							.reviewsAll-reviews-container {
+							    margin: 0 auto;
+							    max-width: 900px; /* 最大幅を設定して、横に広がりすぎないように */
+							    padding: 20px;
+							}
+
+							/* 各レビューアイテム */
+							.reviewsAll-review-item {
+							    margin-bottom: 25px;
+							    padding: 15px;
+							    border: 1px solid #ddd;
+							    border-radius: 8px;
+							    background-color: #f9f9f9;
+							    word-wrap: break-word; /* 長い単語が折り返される */
+							}
+
+							/* レビューのユーザー名と日付 */
+							.reviewsAll-review-header {
+							    display: flex;
+							    justify-content: space-between;
+							    margin-bottom: 10px;
+							}
+
+							.reviewsAll-review-user {
+							    font-size: 1.2em;
+							    font-weight: bold;
+							}
+
+							.reviewsAll-review-date {
+							    font-size: 0.9em;
+							    color: #777;
+							}
+
+							/* 評価（星）のスタイル */
+							.reviewsAll-review-rating {
+							    margin-top: 5px;
+							}
+
+							.reviewsAll-star {
+							    color: #f5b742;
+							    font-size: 1.5em;
+							}
+
+							/* レビュー内容 */
+							.reviewsAll-review-content {
+							    margin-top: 10px;
+							    font-size: 1em;
+							    color: #333;
+							    white-space: normal; /* 折り返しを許可 */
+							}
+
+							/* 店舗詳細に戻るボタン */
+							.reviewsAll-back-button {
+							    display: block;           /* blockに戻して中央寄せにする */
+							    margin: 30px auto;        /* 左右自動で中央寄せ */
+							    padding: 8px 15px;        /* 高さと幅を調整して楕円形に */
+							    text-align: center;
+							    font-size: 1em;
+							    color: white;
+							    background-color: #007bff;
+							    text-decoration: none;
+							    border-radius: 50px;      /* 楕円形にする */
+							    width: auto;              /* 幅を自動で調整 */
+							    min-width: 120px;         /* 最小幅を設定して小さすぎないようにする */
+							    max-width: 150px;         /* 最大幅を設定 */
+							}
+
+							.reviewsAll-back-button:hover {
+							    background-color: #0056b3;
+							}
+
+							
+							
+							
+							/* レビュー部分のスタイル */
+							.shopreview-reviews-container {
+							    margin: 20px 0;
+							}
+
+							.shopreview-heading {
+							    font-size: 1.5em;
+							    font-weight: bold;
+							    margin-bottom: 15px;
+							}
+
+							.shopreview-no-reviews {
+							    font-size: 1.2em;
+							    color: #888;
+							    text-align: center;
+							    margin-top: 20px;
+							}
+
+							/* 各レビューアイテム */
+							.shopreview-review-item {
+							    display: flex;
+							    align-items: center; /* 横並びにし、縦方向に中央揃え */
+							    justify-content: flex-start; /* アイテムを左揃えに */
+							    margin-bottom: 20px;
+							    border-bottom: 1px solid #ddd;
+							    padding-bottom: 15px;
+							    flex-wrap: wrap; /* レスポンシブ対応 */
+							}
+
+							/* ヘッダー部分（ユーザー名、日付） */
+							.shopreview-review-header {
+							    display: flex;
+							    justify-content: space-between;
+							    align-items: center;
+							    flex-basis: 100%; /* ヘッダーは最大限の幅を使う */
+							    margin-bottom: 10px;
+							}
+
+							.shopreview-review-user {
+							    font-size: 1.1em;
+							    font-weight: bold;
+							}
+
+							.shopreview-review-date {
+							    font-size: 0.9em;
+							    color: #777;
+							}
+
+							/* 評価（星）のスタイル */
+							.shopreview-review-rating {
+							    margin: 5px 10px;
+							    display: flex;
+							    justify-content: center;
+							    align-items: center;
+							    width: auto; /* 評価部分の幅を自動調整 */
+							}
+
+							.shopreview-star {
+							    color: #f5b742;
+							    font-size: 1.5em;
+							}
+
+							/* レビュー内容 */
+							.shopreview-review-content {
+							    font-size: 1em;
+							    color: #333;
+							    white-space: normal; /* 改行するように変更 */
+							    overflow: hidden;
+							    text-overflow: ellipsis; /* 長い内容は省略して「...」を表示 */
+							    flex: 1; /* 残りのスペースを使用 */
+							    padding-left: 10px;
+							    word-wrap: break-word; /* 長い単語を折り返す */
+							}
+
+							/* すべてのレビューを見るリンク */
+							.shopreview-see-all {
+							    text-align: center;
+							    margin-top: 15px;
+							}
+
+							.shopreview-see-all a {
+							    text-decoration: none;
+							    color: #007bff;
+							    font-size: 1.1em;
+							}
+
+							.shopreview-see-all a:hover {
+							    text-decoration: underline;
+							}
+
+							

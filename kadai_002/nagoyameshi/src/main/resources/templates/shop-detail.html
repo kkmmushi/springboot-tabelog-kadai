@@ -47,6 +47,39 @@
                 <p th:text="${shop.description}">店舗詳細情報</p>
             </div>
         </div>
+		
+		
+		
+		<!-- 最新レビュー（最大4件表示） -->
+		<div sec:authorize="isAuthenticated() and #authentication.principal.userType == 'PAID_USER'" class="shopreview-reviews-container">
+		    <h3 class="shopreview-heading">レビュー</h3>
+
+		    <!-- レビューがない場合のメッセージ -->
+		    <div th:if="${#lists.isEmpty(topReviews)}" class="shopreview-no-reviews">
+		        <p>まだレビューがありません。</p>
+		    </div>
+
+		    <!-- レビューがある場合 -->
+		    <div th:each="review : ${topReviews}" class="shopreview-review-item">
+		        <div class="shopreview-review-header">
+		            <p class="shopreview-review-user"><strong th:text="${review.userId.name}"></strong></p>
+		            <p class="shopreview-review-date"><span th:text="${#dates.format(review.createdAt, 'yyyy-MM-dd')}"></span></p>
+		        </div>
+		        <div class="shopreview-review-rating">
+		            <span th:each="i : ${#numbers.sequence(1, review.rate)}" class="shopreview-star">★</span>
+		        </div>
+		        <p class="shopreview-review-content" th:text="${review.reviewContent}"></p>
+		    </div>
+
+		    <!-- レビューが4件以上ある場合に「すべてのレビューを見る」リンク -->
+		    <div th:if="${reviews.size() > 4}" class="shopreview-see-all">
+		        <a th:href="@{/reviews/{shopId}(shopId=${shop.shopId})}">すべてのレビューを見る</a>
+		    </div>
+		</div>
+
+		
+		
+		
 
         <!-- 予約フォーム（有料会員のみ表示） -->
         <div sec:authorize="isAuthenticated() and #authentication.principal.userType == 'PAID_USER'" class="reservation-form">

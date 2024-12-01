@@ -26,4 +26,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     
     // 店舗IDでレビューを取得し、作成日時で降順に並べる（最新3件を取得）
     List<Review> findTop3ByShopIdOrderByCreatedAtDesc(Shop shopId);
+
+
+
 }
+
+
